@@ -1,0 +1,116 @@
+html, body {
+    background-color: antiquewhite;
+    margin: 0;
+    padding: 0;
+}
+
+.head_bar {
+    background: green;
+    padding: 10px;
+    font-size: 14px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.head_bar .left_info {
+    font-family: monospace;
+    color: white;
+    display: flex;
+    gap: 16px;
+    font-weight: bold;
+}
+
+.head_bar .right_action a {
+    text-decoration: none;
+    color: white;
+    font-family: sans-serif;
+    font-weight: bold;
+    margin: 12px;
+}
+
+.main_nav {
+    padding: 20px; 
+    display: flex;
+    align-items: center;
+    background-color: white;
+}
+
+.main_nav .logo {
+    color: green;
+    font-weight: bolder;
+    font-size: 40px;
+}
+
+.main_nav .search_nav {    
+    margin-left: 80px;
+}
+
+.search_nav input {
+    padding: 8px 200px;
+    border: 1px solid;
+    text-align: left;
+}
+
+.search_nav .search_btn {
+    padding: 8px 13px;
+    font-weight: bold;
+    border-radius: 6px;
+    cursor: pointer;
+    background: black;
+    color: white;
+}
+
+.search_nav .search_btn:hover {
+    background: #333333;
+}
+
+.main_section {
+    display: flex;
+    margin-top: 20px;
+    margin-left: 60px;
+    margin-right: 60px;
+    gap: 40px;
+}
+
+.category_div {
+    width: 250px;
+}
+
+.category_bar {
+    list-style: none;
+    margin: 0px auto;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 1px;
+    background: white;
+}
+
+.category_bar a {
+    padding: 6px 16px;
+    font-weight: bold;
+    font-size: 25px;
+}
+
+.category_bar li {
+    text-decoration: none;
+    padding: 8px 16px;
+    transition: all 0.3s;
+    cursor: pointer;
+}
+
+.category_bar li:hover {
+    background: #ebebeb;
+}
+
+.banner_div {
+    flex: 1;
+    overflow: hidden;
+}
+
+.banner_div img {
+    width: 100%;
+    height: 355px;
+    display: block;
+}
