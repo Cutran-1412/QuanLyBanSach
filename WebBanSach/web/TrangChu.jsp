@@ -28,7 +28,7 @@
         </nav>
         
         <section class="main_section">
-            <div class="category_div">
+            <div class="left_section">
                 <ul class="category_bar">
                     <a>Danh mục</a>
                     <li>Sách Kinh Tế</li>
@@ -42,8 +42,18 @@
                     <li>Sách Triết Học</li>
                 </ul>
             </div>
-            <div class="banner_div">
-                <img src="banner.png">
+            <div class="right_section">
+                <div class="banner_div">
+                    <img class="big_banner" src="home_slider_image_1.jpg">
+                    <img class="small_banner_1" src="htb_img_1.jpg">
+                    <img class="small_banner_1" src="htb_img_2.jpg">
+                </div>
+                <div class="book_selection">
+                    <div class="option">
+                        <button class="tab_button active">Sách mới nổi bật</button>
+                        <button class="tab_button">Sách khuyến mãi</button>
+                    </div>
+                </div>
             </div>
         </section>
     </body>
