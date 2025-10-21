@@ -1,3 +1,6 @@
+<%@page import="Models.TheLoai"%>
+<%@page import="Models.Sach"%>
+<%@page import="java.util.List"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
@@ -28,33 +31,34 @@
         </nav>
         
         <section class="main_section">
-            <div class="left_section">
+            <div class="category_div">
                 <ul class="category_bar">
                     <a>Danh mục</a>
-                    <li>Sách Kinh Tế</li>
-                    <li>Sách Văn Học Nước Ngoài</li>
-                    <li>Sách Văn Học Trong Nước</li>
-                    <li>Sách Thiếu Nhi</li>
-                    <li>Sách Tin Học</li>
-                    <li>Sách Giáo Khoa</li>
-                    <li>Sách Phát Hành 2024</li>
-                    <li>Sách Phát Hành 2025</li>
-                    <li>Sách Triết Học</li>
+                    <%
+                    List<TheLoai> listTheLoai = (List<TheLoai>) request.getAttribute("TheLoaiDB");
+                    for(TheLoai t : listTheLoai) {
+                    %>
+                    <li><%=t.getTenTheLoai()%></li>
+                    <%}%>
                 </ul>
             </div>
-            <div class="right_section">
-                <div class="banner_div">
-                    <img class="big_banner" src="home_slider_image_1.jpg">
-                    <img class="small_banner_1" src="htb_img_1.jpg">
-                    <img class="small_banner_1" src="htb_img_2.jpg">
-                </div>
-                <div class="book_selection">
-                    <div class="option">
-                        <button class="tab_button active">Sách mới nổi bật</button>
-                        <button class="tab_button">Sách khuyến mãi</button>
-                    </div>
+            <div class="content_div">
+                <h2 style="text-align: center">Danh sách sách</h2>
+                <div class="book_container">
+                    <% List<Sach> listSach = (List<Sach>) request.getAttribute("SachDB");
+                       if (listSach != null && !listSach.isEmpty()) {
+                           for (Sach s : listSach) { %>
+                           <div class="book-card" onclick="window.location.href='ChiTietSach?MaSach=<%= s.getMaSach() %>'">
+                            <img src="<%= s.getAnh() %>" alt="<%= s.getTenSach() %>">
+                            <div class="book-title"><%= s.getTenSach() %></div>
+                            <div class="book-price"><%= String.format("%,.0f", s.getGia()) %> VNĐ</div>
+                        </div>
+                    <% } } else { %>
+                        <p>Không có sách nào để hiển thị.</p>
+                    <% } %>
                 </div>
             </div>
+            
         </section>
     </body>
 </html>
