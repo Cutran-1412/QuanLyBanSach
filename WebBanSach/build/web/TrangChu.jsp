@@ -1,3 +1,5 @@
+<%@page import="Models.Sach"%>
+<%@page import="java.util.List"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
@@ -42,9 +44,23 @@
                     <li>Sách Triết Học</li>
                 </ul>
             </div>
-            <div class="banner_div">
-                <img src="banner.png">
+            <div class="content_div">
+                <h2 style="text-align: center">Danh sách sách</h2>
+                <div class="book_container">
+                    <% List<Sach> list = (List<Sach>) request.getAttribute("SachDB");
+                       if (list != null && !list.isEmpty()) {
+                           for (Sach s : list) { %>
+                           <div class="book-card" onclick="window.location.href='ChiTietSach?MaSach=<%= s.getMaSach() %>'">
+                            <img src="<%= s.getAnh() %>" alt="<%= s.getTenSach() %>">
+                            <div class="book-title"><%= s.getTenSach() %></div>
+                            <div class="book-price"><%= String.format("%,.0f", s.getGia()) %> VNĐ</div>
+                        </div>
+                    <% } } else { %>
+                        <p>Không có sách nào để hiển thị.</p>
+                    <% } %>
+                </div>
             </div>
+            
         </section>
     </body>
 </html>
