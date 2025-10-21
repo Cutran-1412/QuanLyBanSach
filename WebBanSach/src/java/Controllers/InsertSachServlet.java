@@ -4,10 +4,10 @@
  */
 package Controllers;
 
-import DAO.NguoiDungDAO;
 import DAO.SachDAO;
-import Models.NguoiDung;
+import DAO.TheLoaiDAO;
 import Models.Sach;
+import Models.TheLoai;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
@@ -15,6 +15,8 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.Part;
+import java.io.File;
 import java.util.List;
 
 /**
@@ -62,7 +64,10 @@ public class InsertSachServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        
+        TheLoaiDAO tldao = new TheLoaiDAO();
+        List<TheLoai> list = tldao.getData();
+        request.setAttribute("listtheloai", list);
+        request.getRequestDispatcher("Admin/Pages/ThemSach.jsp").forward(request, response);
     }
 
     /**
@@ -76,7 +81,32 @@ public class InsertSachServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        processRequest(request, response);
+        String maSach = request.getParameter("MaSach");
+        String tenSach = request.getParameter("TenSach");
+        String tacGia = request.getParameter("TacGia");
+        String nhaXuatBan = request.getParameter("NhaXuatBan");
+        int namXuatBan = Integer.parseInt(request.getParameter("NamXuatBan"));
+        double gia = Double.parseDouble(request.getParameter("Gia"));
+        int soLuong = Integer.parseInt(request.getParameter("SoLuong"));
+        String moTa = request.getParameter("MoTa");
+        String maTheLoai = request.getParameter("MaTheLoai");
+        Part filePart = request.getPart("Anh");
+        String fileName = filePart.getSubmittedFileName();
+        String uploadPath = getServletContext().getRealPath("Assets/Images");
+        File uploadDir = new File(uploadPath);
+        if (!uploadDir.exists()) {
+            uploadDir.mkdirs();
+        }
+        filePart.write(uploadPath + File.separator + fileName);
+        String anhPath = "Assets/Images/" + fileName;
+        Sach sach = new Sach(maSach, tenSach, tacGia, nhaXuatBan, namXuatBan, gia, soLuong, moTa, anhPath, maTheLoai);
+//        new SachDAO().Insert(sach);
+        response.setContentType("text/html;charset=UTF-8");
+        response.getWriter().println("<script>");
+        response.getWriter().println("alert('Thêm sách thành công!');");
+        response.getWriter().println("window.parent.closePopup();");  // Gọi hàm closePopup() ở trang cha
+        response.getWriter().println("window.parent.location.reload();"); // Reload lại trang danh sách
+        response.getWriter().println("</script>");
     }
 
     /**

@@ -3,15 +3,7 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/D:/Projeck/QuanLyBanSach/WebBanSach/web/Admin/Pages/Home.jsp</file>
-            <file>file:/D:/Projeck/QuanLyBanSach/WebBanSach/src/java/Controllers/InsertSachServlet.java</file>
-            <file>file:/D:/Projeck/QuanLyBanSach/WebBanSach/web/Admin/Admin.jsp</file>
-            <file>file:/D:/Projeck/QuanLyBanSach/WebBanSach/src/java/DAO/NguoiDungDAO.java</file>
-            <file>file:/D:/Projeck/QuanLyBanSach/WebBanSach/src/java/Controllers/HomeServlet.java</file>
-            <file>file:/D:/Projeck/QuanLyBanSach/WebBanSach/web/TrangChu.jsp</file>
-            <file>file:/D:/Projeck/QuanLyBanSach/WebBanSach/web/Admin/Pages/Sach.jsp</file>
-            <file>file:/D:/Projeck/QuanLyBanSach/WebBanSach/web/index.html</file>
-            <file>file:/D:/Projeck/QuanLyBanSach/WebBanSach/src/java/Controllers/AdminSachServlet.java</file>
+            <file>file:/D:/Projeck/QuanLyBanSach/WebBanSach/src/java/Controllers/AdminNguoiDungServlet.java</file>
         </group>
     </open-files>
 </project-private>

@@ -14,7 +14,7 @@ import java.sql.*;
  * @author Admin
  */
 public class TheLoaiDAO {
-    public List<TheLoai> getAll() {
+    public List<TheLoai> getData() {
         List<TheLoai> list = new ArrayList<>();
         String sql = "SELECT * FROM theloai";
         try (Connection conn = DBConnection.getConnection();

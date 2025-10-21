@@ -12,6 +12,44 @@
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <title>JSP Page</title>
+        <style>
+            table {
+                width: 100%;
+                border-collapse: collapse;
+                margin-top: 20px;
+            }
+
+            th, td {
+                border: 1px solid #ddd;
+                padding: 10px;
+                text-align: center;
+            }
+
+            th {
+                background-color: #4CAF50;
+                color: white;
+            }
+
+            tr:nth-child(even) {
+                background-color: #f2f2f2;
+            }
+
+            img {
+                width: 60px;
+                height: 80px;
+                object-fit: cover;
+                border-radius: 5px;
+            }
+
+            a img:hover {
+                transform: scale(1.2);
+                transition: 0.3s;
+            }
+
+            h2 {
+                text-align: center;
+            }
+        </style>
     </head>
     <body>
         <Table>

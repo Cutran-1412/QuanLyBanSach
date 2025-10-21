@@ -1,0 +1,91 @@
+/*
+Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/CascadeStyleSheet.css to edit this template
+*/
+/* 
+    Created on : Oct 16, 2025, 10:49:12 PM
+    Author     : Windows
+*/
+:root {
+  --btn-radius: 8px;
+  --btn-font-size: 16px;
+  --btn-padding: 10px 20px;
+  --btn-transition: 0.25s ease;
+}
+button, .btn {
+  font-family: "Segoe UI", Arial, sans-serif;
+  font-size: var(--btn-font-size);
+  border: none;
+  border-radius: var(--btn-radius);
+  cursor: pointer;
+  transition: var(--btn-transition);
+  padding: var(--btn-padding);
+  font-weight: 500;
+  outline: none;
+}
+
+/* Hiệu ứng hover nhẹ */
+button:hover, .btn:hover {
+  transform: scale(1.05);
+  opacity: 0.95;
+}
+
+/* ------------------------
+   Các loại nút mặc định
+------------------------ */
+
+/* Nút chính (Primary) */
+.btn-add {
+    background-color: #28a745;
+    color: white;
+}
+.btn-add:hover {
+    background-color: #218838;
+    transform: scale(1.05);
+}
+
+/* ======= NÚT SỬA ======= */
+.btn-edit {
+    background-color: #ffc107;
+    color: #212529;
+}
+.btn-edit:hover {
+    background-color: #e0a800;
+    transform: scale(1.05);
+}
+
+/* ======= NÚT XÓA ======= */
+.btn-delete {
+    background-color: #dc3545;
+    color: white;
+}
+.btn-delete:hover {
+    background-color: #c82333;
+    transform: scale(1.05);
+}
+
+/* ======= NÚT TÌM KIẾM ======= */
+.btn-search {
+    background-color: #007bff;
+    color: white;
+}
+.btn-search:hover {
+    background-color: #0069d9;
+    transform: scale(1.05);
+}
+
+/* ======= NÚT XEM CHI TIẾT ======= */
+.btn-detail {
+    background-color: #17a2b8;
+    color: white;
+}
+.btn-detail:hover {
+    background-color: #138496;
+    transform: scale(1.05);
+}
+.action-buttons {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 6px; /* khoảng cách giữa các nút */
+}
