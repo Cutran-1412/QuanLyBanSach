@@ -100,7 +100,7 @@
             List<TheLoai> listTheLoai = (List<TheLoai>) request.getAttribute("listtheloai");
         %>
         <h2>Thêm Sách Mới</h2>
-        <form action="InsertSach" method="post" enctype="multipart/form-data">
+        <form action="AdminThemSach" method="post" enctype="multipart/form-data">
             <label>Mã sách:</label>
             <input type="text" name="MaSach" required>
 
@@ -144,7 +144,6 @@
                 <img id="preview" style="display:none;" alt="Xem trước ảnh">
             </div>
             <input type="file" name="Anh" accept="image/*" onchange="previewImage(event)" required>
-
             <button type="submit">Lưu Sách</button>
         </form>
     </body>

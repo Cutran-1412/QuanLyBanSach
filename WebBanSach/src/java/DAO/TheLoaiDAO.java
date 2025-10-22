@@ -34,19 +34,20 @@ public class TheLoaiDAO {
         return list;
     }
     public TheLoai getById(String maTheLoai) {
+        TheLoai tl = null;
         String sql = "SELECT * FROM theloai WHERE MaTheLoai=?";
         try (Connection conn = DBConnection.getConnection();
-             PreparedStatement ps = conn.prepareStatement(sql)) {
+            PreparedStatement ps = conn.prepareStatement(sql)) {
             
             ps.setString(1, maTheLoai);
             ResultSet rs = ps.executeQuery();
             if (rs.next()) {
-                return new TheLoai(rs.getString("MaTheLoai"), rs.getString("TenTheLoai"));
+                tl = new TheLoai(rs.getString("MaTheLoai"), rs.getString("TenTheLoai"));
             }
         } catch (Exception ex) {
             ex.printStackTrace();
         }
-        return null;
+        return tl;
     }
     public void Insert(TheLoai theLoai) {
         String sql = "INSERT INTO theloai (MaTheLoai, TenTheLoai) VALUES (?, ?)";
@@ -83,5 +84,38 @@ public class TheLoaiDAO {
         } catch (Exception ex) {
             ex.printStackTrace();
         }
+    }
+    public List<TheLoai> searchByMa(String ma) {
+        List<TheLoai> list = new ArrayList<>();
+        try {
+            Connection conn = DBConnection.getConnection();
+            String sql = "SELECT * FROM TheLoai WHERE MaTheLoai LIKE ?";
+            PreparedStatement ps = conn.prepareStatement(sql);
+            ps.setString(1, "%" + ma + "%");
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                list.add(new TheLoai(rs.getString("MaTheLoai"), rs.getString("TenTheLoai")));
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return list;
+    }
+
+    public List<TheLoai> searchByTen(String ten) {
+        List<TheLoai> list = new ArrayList<>();
+        try {
+            Connection conn = DBConnection.getConnection();
+            String sql = "SELECT * FROM TheLoai WHERE TenTheLoai LIKE ?";
+            PreparedStatement ps = conn.prepareStatement(sql);
+            ps.setString(1, "%" + ten + "%");
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                list.add(new TheLoai(rs.getString("MaTheLoai"), rs.getString("TenTheLoai")));
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return list;
     }
 }

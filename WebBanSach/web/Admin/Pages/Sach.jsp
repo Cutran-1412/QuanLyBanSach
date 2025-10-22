@@ -16,14 +16,17 @@
         <link href="${pageContext.request.contextPath}/Assets/CSS/Table.css" rel="stylesheet" type="text/css"/>
         <link href="${pageContext.request.contextPath}/Assets/CSS/Image.css" rel="stylesheet" type="text/css"/>
         <link href="${pageContext.request.contextPath}/Assets/CSS/Popup.css" rel="stylesheet" type="text/css"/>
-        </style>
     </head>
     <body>
- 
-        <div style="text-align: center"> 
-            <button class="btn-add" onclick="openPopup('InsertSach')">Thêm</button>
-            <input type="text" placeholder="Nhập từ khóa..." style="width: 300px; height: 40px; font-size: 16px; padding: 5px;">
-            <button class="btn-search">Tìm kiếm</button>
+        <div style="text-align: center; margin-bottom: 20px;"> 
+            <button class="btn-add" onclick="openPopup('AdminThemSach')">Thêm</button>
+
+            <!-- Ô tìm kiếm -->
+            <input type="text" id="searchInput" placeholder="Nhập từ khóa..." 
+                   style="width: 300px; height: 40px; font-size: 16px; padding: 5px;">
+
+            <!-- Nút tìm kiếm -->
+            
         </div>
         <div id="popup" class="popup">
             <div class="popup-content">
@@ -46,6 +49,9 @@
             if (dsSach != null) {
                 for (Sach s : dsSach) {
         %>
+        <%
+        System.out.println(">>> JSP loaded, dsSach size = " + (dsSach != null ? dsSach.size() : "null"));
+    %>
             <tr>
                 <td><%= s.getMaSach() %></td>
                 <td><%= s.getTenSach() %></td>
@@ -54,9 +60,9 @@
                 <td><img src="<%= s.getAnh() %>" alt="<%= s.getTenSach() %>"></td>
                 <td class="action-buttons">
                     <div>
-                        <button class="btn-edit">Sửa</button>
-                        <button class="btn-delete">Xóa</button>
-                        <button class="btn-detail"onclick="openPopup('AdminChiTietSach?ma=<%= s.getMaSach() %>')">Chi tiết</button>
+                        <button class="btn-edit" onclick="openPopup('AdminSuaSach?ma=<%=s.getMaSach() %>')">Sửa</button>
+                        <button class="btn-delete" onclick="openPopup('AdminXoaSach?ma=<%=s.getMaSach() %>')">Xóa</button>
+                        <button class="btn-detail"onclick="openPopup('AdminChiTietSach?ma=<%=s.getMaSach() %>')">Chi tiết</button>
                     </div>
                 </td>
             </tr>
@@ -70,6 +76,7 @@
         <%
             }
         %>
+        
     </table>
     <script>
         function openPopup(url) {
@@ -90,6 +97,7 @@
                 window.location.href = "SachServlet?action=delete&ma=" + maSach;
             }
         }
+        
     </script>
     </body>
 </html>

@@ -60,11 +60,9 @@ public class AdminSachServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        SachDAO sDAO = new SachDAO();
-        List<Sach> list = sDAO.getData();
-        request.setAttribute("list", list);
-        request.getRequestDispatcher("Admin/Pages/Sach.jsp").forward(request, response);
-        processRequest(request, response);
+            List<Sach> list = new SachDAO().getData();
+            request.setAttribute("list", list);
+            request.getRequestDispatcher("Admin/Pages/Sach.jsp").forward(request, response);
     }
 
     /**

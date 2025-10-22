@@ -100,7 +100,7 @@
                 <p><%= s.getMoTa() %></p>
 
                 <button class="btn-close" onclick="window.parent.closePopup()">Đóng</button>
-            </div>n
+            </div>
         </div>
     </body>
 </html>

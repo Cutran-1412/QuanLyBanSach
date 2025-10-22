@@ -65,8 +65,7 @@ public class SachDAO {
         Connection conn = DBConnection.getConnection();
         if (conn != null) {
             try {
-                String sql = "UPDATE Sach SET TenSach=?, TacGia=?, NhaXuatBan=?, NamXuatBan=?, Gia=?, SoLuong=?, MoTa=?, Anh=?, MaTheLoai=? "
-                        + "WHERE MaSach=?";
+                String sql = "UPDATE Sach SET TenSach=?, TacGia=?, NhaXuatBan=?, NamXuatBan=?, Gia=?, SoLuong=?, MoTa=?, Anh=?, MaTheLoai=? WHERE MaSach=?";
                 PreparedStatement ps = conn.prepareStatement(sql);
                 ps.setString(1, s.getTenSach());
                 ps.setString(2, s.getTacGia());
@@ -130,5 +129,35 @@ public class SachDAO {
             }
         }
         return s;
+    }
+    public List<Sach> getByName(String ten) {
+        List<Sach> list = new ArrayList<>();
+        Connection conn = DBConnection.getConnection();
+        if (conn != null) {
+            try {
+                String sql = "SELECT * FROM Sach WHERE TenSach LIKE ?";
+                PreparedStatement ps = conn.prepareStatement(sql);
+                ps.setString(1, "%" + ten + "%");
+                ResultSet rs = ps.executeQuery();
+                while (rs.next()) {
+                    list.add(new Sach(
+                            rs.getString("MaSach"),
+                            rs.getString("TenSach"),
+                            rs.getString("TacGia"),
+                            rs.getString("NhaXuatBan"),
+                            rs.getInt("NamXuatBan"),
+                            rs.getDouble("Gia"),
+                            rs.getInt("SoLuong"),
+                            rs.getString("MoTa"),
+                            rs.getString("Anh"),
+                            rs.getString("MaTheLoai")
+                    ));
+                }
+                conn.close();
+            } catch (SQLException ex) {
+                ex.printStackTrace();
+            }
+        }
+        return list;
     }
 }
