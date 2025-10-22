@@ -19,15 +19,9 @@ import DAO.SachDAO;
  *
  * @author THIS PC
  */
-@WebServlet( urlPatterns = {"/chitietsach"})
+@WebServlet("/ChiTietSach")
 public class ChiTietSach extends HttpServlet {
     private static final long serialVersionUID = 1L;
-    private SachDAO sachDAO;
-
-    @Override
-    public void init() {
-        sachDAO = new SachDAO();
-    }
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -67,35 +61,20 @@ public class ChiTietSach extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-       String maSach = request.getParameter("MaSach");
+        String maSach = request.getParameter("MaSach"); // lấy theo key "masach" từ URL
+        if (maSach != null && !maSach.trim().isEmpty()) {
+            SachDAO dao = new SachDAO();
+            Sach s = dao.getById(maSach);
 
-        // Kiểm tra có mã sách không
-        if (maSach == null || maSach.trim().isEmpty()) {
-    // Nếu không nhập mã
-    request.setAttribute("thongbao", "Vui lòng nhập mã sách.");
-    request.getRequestDispatcher("Pages/chitietsach.jsp").forward(request, response);
-    return;
-        }
-
-        // Gọi DAO để lấy thông tin sách
-        SachDAO sachDAO = new SachDAO();
-        Sach sach = sachDAO.getById(maSach);
-
-        // Nếu không tìm thấy sách
-        if (sach == null) {
-    // Không chuyển qua error.jsp, chỉ gửi thông báo sang JSP hiện tại
-    request.setAttribute("thongbao", "Sách đã hết hoặc không tồn tại.");
-    request.getRequestDispatcher("Pages/chitietsach.jsp").forward(request, response);
-    return;
-        }
-
-        // Gửi dữ liệu sang JSP
-        request.setAttribute("sach", sach);
-
-        // Chuyển đến ChiTietSach.jsp trong thư mục /web
-        RequestDispatcher rd = request.getRequestDispatcher("Pages/chitietsach.jsp");
-        rd.forward(request, response);
-        processRequest(request, response);
+            if (s != null) {
+                request.setAttribute("sach", s);
+                request.getRequestDispatcher("/Pages/ChiTietSach.jsp").forward(request, response);
+            } else {
+                response.getWriter().println("Không tìm thấy sách với mã: " + maSach);
+            }
+        } else {
+            response.getWriter().println("Mã sách không hợp lệ!");
+    }
     }
     
 
