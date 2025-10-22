@@ -1,4 +1,5 @@
 <%@page import="Models.Sach"%>
+<%@page import="DAO.SachDAO"%>
 <%@page import="java.util.List"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
@@ -50,17 +51,18 @@
                     <% List<Sach> list = (List<Sach>) request.getAttribute("SachDB");
                        if (list != null && !list.isEmpty()) {
                            for (Sach s : list) { %>
-                           <div class="book-card" onclick="window.location.href='ChiTietSach?MaSach=<%= s.getMaSach() %>'">
+                           <div class="book-card" onclick="window.location.href='<%= request.getContextPath() %>/ChiTietSach?MaSach=<%= s.getMaSach() %>'">>
                             <img src="<%= s.getAnh() %>" alt="<%= s.getTenSach() %>">
                             <div class="book-title"><%= s.getTenSach() %></div>
                             <div class="book-price"><%= String.format("%,.0f", s.getGia()) %> VNĐ</div>
                         </div>
+                       
                     <% } } else { %>
                         <p>Không có sách nào để hiển thị.</p>
                     <% } %>
                 </div>
             </div>
-            
         </section>
+               
     </body>
 </html>
