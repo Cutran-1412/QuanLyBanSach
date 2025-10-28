@@ -92,7 +92,7 @@
         }
 
         function confirmDelete(maSach) {
-            if (confirm("Bạn có chắc muốn xóa sách này không?")) {
+            if (confirm("Bạn cnfirmDeletó chắc muốn xóa sách này không?")) {
                 // Gửi yêu cầu xóa đến servlet
                 window.location.href = "SachServlet?action=delete&ma=" + maSach;
             }

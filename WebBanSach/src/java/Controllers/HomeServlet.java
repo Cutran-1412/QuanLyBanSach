@@ -1,6 +1,7 @@
 package Controllers;
 
 import DAO.SachDAO;
+import Models.NguoiDung;
 import Models.Sach;
 import jakarta.servlet.RequestDispatcher;
 import java.io.IOException;
@@ -20,7 +21,7 @@ import java.util.List;
 public class HomeServlet extends HttpServlet {
 
     /**
-     * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
+     * Processes re quests for both HTTP <code>GET</code> and <code>POST</code>
      * methods.
      *
      * @param request servlet request
@@ -31,18 +32,7 @@ public class HomeServlet extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
-        try (PrintWriter out = response.getWriter()) {
-            /* TODO output your page here. You may use following sample code. */
-            out.println("<!DOCTYPE html>");
-            out.println("<html>");
-            out.println("<head>");
-            out.println("<title>Servlet HomeServlet</title>");
-            out.println("</head>");
-            out.println("<body>");
-            out.println("<h1>Servlet HomeServlet at " + request.getContextPath() + "</h1>");
-            out.println("</body>");
-            out.println("</html>");
-        }
+        response.getWriter().println("<h1>Trang HomeServlet</h1>");
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
@@ -54,12 +44,14 @@ public class HomeServlet extends HttpServlet {
      * @throws ServletException if a servlet-specific error occurs
      * @throws IOException if an I/O error occurs
      */
+    public static NguoiDung nd = null;
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         SachDAO dao = new SachDAO();
         List<Sach> list = dao.getData();
         request.setAttribute("SachDB", list);
+        request.setAttribute("NguoiDung", nd);
         RequestDispatcher dispatcher = request.getRequestDispatcher("/TrangChu.jsp");
         dispatcher.forward(request, response);
     }

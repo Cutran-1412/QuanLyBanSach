@@ -158,4 +158,44 @@ public class NguoiDungDAO {
         }
         return nd;
     }
+    public String getMa(){
+        String newMaNguoiDung ="";
+        String sql ="Select MaNguoiDung From NguoiDung Order By MaNguoiDung Desc Limit 1";
+        Connection conn = DBConnection.getConnection();
+        try {
+            Statement stmt = conn.createStatement();
+            ResultSet rs = stmt.executeQuery(sql);
+            String prefix = "ND";
+            newMaNguoiDung = prefix +"01";
+            if(rs.next()){
+                String lastMaNguoiDung = rs.getString("MaNguoiDung");
+                String numberPart = lastMaNguoiDung.replaceAll("\\D", "");
+                int number = Integer.parseInt(numberPart)+1;
+                newMaNguoiDung = prefix + String.format("%02d", number);
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(NguoiDungDAO.class.getName()).log(Level.SEVERE, null, ex);
+            
+        }
+        return newMaNguoiDung;
+    }
+    public boolean CheckUser(String user){
+        Connection conn = DBConnection.getConnection();
+        if(conn != null){
+            try {
+                String sql = "Select *From NguoiDung";
+                Statement stmt = conn.createStatement();
+                ResultSet rs = stmt.executeQuery(sql);
+                while(rs.next()){
+                    if(user.equals(rs.getString("TaiKhoan"))){
+                        return true;
+                    }
+                }
+                conn.close();
+            } catch (SQLException ex) {
+                Logger.getLogger(NguoiDungDAO.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+        return false;
+    }
 }
