@@ -132,7 +132,6 @@
         </section>
                 <div id="popup" class="popup-overlay" style="display:none;">
         <div class="popup-box">
-            <span class="close-btn" onclick="closePopup()">&times;</span>
             <div id="popup-content"></div>
         </div>
     </div>

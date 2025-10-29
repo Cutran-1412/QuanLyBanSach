@@ -1,310 +1,323 @@
-<%-- 
-    Document   : DangKi
-    Created on : Oct 19, 2025, 8:09:14 PM
-    Author     : Windows
---%>
+<%@ page contentType="text/html;charset=UTF-8" %>
+<style>
+/* ----- LỚP NỀN MỜ TOÀN MÀN HÌNH ----- */
+.register-modal-wrapper {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: transparent;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 9999;
+    overflow-y: auto;
+    padding: 20px;
+    box-sizing: border-box;
+}
 
-<%@page contentType="text/html" pageEncoding="UTF-8"%>
-<!DOCTYPE html>
-<html>
-    <head>
-        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <title>JSP Page</title>
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-        <style>
-            * {
-                margin: 0;
-                padding: 0;
-                box-sizing: border-box;
-            }
+/* ----- KHUNG CHÍNH CỦA POPUP ----- */
+.register-modal-content {
+    background: #fff;
+    border-radius: 10px;
+    width: 100%;
+    max-width: 500px;
+    overflow: hidden;
+    animation: popupFadeIn 0.3s ease;
+    display: flex;
+    flex-direction: column;
+    border: 2px solid #6B8E23; 
+}
 
-            body {
-                font-family: Arial, sans-serif;
-                background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-                min-height: 100vh;
-                display: flex;
-                justify-content: center;
-                align-items: center;
-                padding: 20px;
-            }
+/* Hiệu ứng mượt khi mở */
+@keyframes popupFadeIn {
+    from { opacity: 0; transform: scale(0.9); }
+    to { opacity: 1; transform: scale(1); }
+}
 
-            .modal-content {
-                background: white;
-                border-radius: 15px;
-                width: 100%;
-                max-width: 500px;
-                box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
-                animation: slideIn 0.5s ease;
-            }
+/* ----- PHẦN HEADER ----- */
+.register-modal-header {
+    background: #6B8E23;
+    padding: 20px;
+    text-align: center;
+    color: white;
+    position: relative;
+}
 
-            @keyframes slideIn {
-                from {
-                    transform: translateY(-50px);
-                    opacity: 0;
-                }
-                to {
-                    transform: translateY(0);
-                    opacity: 1;
-                }
-            }
+.register-modal-logo {
+    font-size: 26px;
+    font-weight: bold;
+}
 
-            .modal-header {
-                background: linear-gradient(135deg, #4a7c0c 0%, #3d6609 100%);
-                padding: 40px 30px;
-                text-align: center;
-                color: white;
-                border-radius: 15px 15px 0 0;
-            }
+.register-modal-logo span:nth-child(2) {
+    color: #FFA500;
+}
 
-            .modal-logo {
-                font-size: 32px;
-                font-weight: bold;
-                margin-bottom: 15px;
-            }
+.register-modal-header h2 {
+    font-size: 22px;
+    margin: 8px 0 0 0;
+}
 
-            .modal-logo span:first-child {
-                color: white;
-            }
+/* Nút đóng */
+.register-close-btn {
+    position: absolute;
+    top: 10px;
+    right: 12px;
+    background: none;
+    border: none;
+    color: white;
+    font-size: 28px;
+    cursor: pointer;
+    transition: transform 0.2s;
+}
+.register-close-btn:hover {
+    transform: scale(1.2);
+}
 
-            .modal-logo span:nth-child(2) {
-                color: #FF9800;
-            }
+/* ----- PHẦN NỘI DUNG ----- */
+.register-modal-body {
+    padding: 25px;
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+}
 
-            .modal-header h2 {
-                font-size: 28px;
-                margin: 0;
-            }
+/* ✅ ĐÓNG KHUNG RÕ CHO INPUT */
+.register-input-group {
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    padding: 6px 10px;
+    transition: border-color 0.3s, box-shadow 0.3s;
+}
+.register-input-group:hover {
+    border-color: #6B8E23;
+}
+.register-input-group:focus-within {
+    border-color: #6B8E23;
+    box-shadow: 0 0 4px rgba(107,142,35,0.5);
+}
 
-            .modal-body {
-                padding: 40px;
-            }
+.register-input-group input {
+    width: 100%;
+    padding: 10px 6px;
+    border: none;
+    font-size: 15px;
+    outline: none;
+    background: transparent;
+}
 
-            .input-group {
-                margin-bottom: 20px;
-            }
+/* Nhóm mật khẩu + icon */
+.register-password-group {
+    position: relative;
+}
+.register-password-toggle {
+    position: absolute;
+    right: 14px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #777;
+    cursor: pointer;
+}
+.register-password-toggle:hover {
+    color: #6B8E23;
+}
 
-            .input-group label {
-                display: block;
-                margin-bottom: 8px;
-                color: #333;
-                font-weight: 500;
-                font-size: 14px;
-            }
+/* ----- NÚT ĐĂNG KÝ ----- */
+.register-btn {
+    width: 100%;
+    background: #FFA500;
+    color: #fff;
+    font-weight: bold;
+    padding: 12px;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    text-transform: uppercase;
+    transition: 0.3s;
+    margin-top: 10px; 
+}
+.register-btn:hover {
+    background: #FF8C00;
+}
 
-            .input-group input {
-                width: 100%;
-                padding: 15px;
-                border: 2px solid #e0e0e0;
-                border-radius: 8px;
-                font-size: 15px;
-                outline: none;
-                transition: all 0.3s;
-            }
+/* ----- NGĂN CÁCH / SOCIAL LOGIN ----- */
+.register-divider {
+    text-align: center;
+    position: relative;
+    margin: 10px 0;
+}
+.register-divider::before {
+    content: "";
+    position: absolute;
+    top: 50%;
+    width: 100%;
+    height: 1px;
+    background: #ddd;
+    left: 0;
+}
+.register-divider span {
+    background: #fff;
+    padding: 0 10px;
+    color: #666;
+    font-size: 14px;
+    position: relative;
+}
 
-            .input-group input:focus {
-                border-color: #4a7c0c;
-                box-shadow: 0 0 0 3px rgba(74, 124, 12, 0.1);
-            }
+/* Social button */
+.register-social-login {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 20px;
+}
+.register-social-btn {
+    flex: 1;
+    padding: 10px;
+    border: none;
+    border-radius: 6px;
+    color: #fff;
+    font-weight: 600;
+    cursor: pointer;
+    transition: 0.3s;
+}
+.register-google-btn {
+    background: #DB4437;
+}
+.register-facebook-btn {
+    background: #4267B2;
+}
+.register-social-btn:hover {
+    opacity: 0.9;
+}
 
-            .password-group {
-                position: relative;
-            }
+/* ----- LINK ĐĂNG NHẬP ----- */
+.register-login-link {
+    text-align: center;
+    font-size: 14px;
+    color: #555;
+}
+.register-login-link a {
+    color: #6B8E23;
+    text-decoration: none;
+    font-weight: 600;
+}
+.register-login-link a:hover {
+    text-decoration: underline;
+}
 
-            .password-toggle {
-                position: absolute;
-                right: 15px;
-                top: 50%;
-                transform: translateY(-50%);
-                cursor: pointer;
-                color: #666;
-                transition: color 0.3s;
-            }
+@media (max-width: 480px) {
+    .register-modal-content {
+        max-width: 95%;
+    }
+}
+</style>
 
-            .password-toggle:hover {
-                color: #4a7c0c;
-            }
 
-            .form-options {
-                display: flex;
-                justify-content: space-between;
-                align-items: center;
-                margin-bottom: 25px;
-            }
+<div class="register-modal-wrapper">
+  <div class="register-modal-content">
+    <div class="register-modal-header">
+      <button class="register-close-btn" onclick="closePopup()" type="button">×</button>
+      <div class="register-modal-logo"><span>Web</span><span>Sach</span><span>.com</span></div>
+      <h2>ĐĂNG KÝ</h2>
+    </div>
 
-            .remember-me {
-                display: flex;
-                align-items: center;
-                gap: 8px;
-                font-size: 14px;
-                color: #666;
-            }
+    <div class="register-modal-body">
+      <form id="registerFormPopup">
+        <div class="register-input-group">
+          <input type="text" id="UsernameRegister" name="Username" placeholder="Tài khoản" required>
+        </div>
 
-            .remember-me input[type="checkbox"] {
-                width: 18px;
-                height: 18px;
-                cursor: pointer;
-            }
+        <div class="register-input-group register-password-group">
+          <input type="password" id="PasswordRegister" name="Password" placeholder="Mật khẩu" required>
+          <i class="fas fa-eye register-password-toggle" id="togglePasswordRegister"></i>
+        </div>
 
-            .forgot-password {
-                font-size: 14px;
-            }
+        <div class="register-input-group">
+          <input type="text" id="HotenRegister" name="Hoten" placeholder="Họ tên" required>
+        </div>
 
-            .forgot-password a {
-                color: #666;
-                text-decoration: none;
-                transition: color 0.3s;
-            }
+        <div class="register-input-group">
+          <input type="email" id="EmailRegister" name="Email" placeholder="Email" required>
+        </div>
 
-            .forgot-password a:hover {
-                color: #4a7c0c;
-                text-decoration: underline;
-            }
+        <div class="register-input-group">
+          <input type="tel" id="SodienthoaiRegister" name="Sodienthoai" placeholder="Số điện thoại" required>
+        </div>
 
-            .login-btn {
-                width: 100%;
-                padding: 16px;
-                background: #FF9800;
-                color: white;
-                border: none;
-                border-radius: 8px;
-                font-size: 16px;
-                font-weight: 600;
-                cursor: pointer;
-                transition: all 0.3s;
-                text-transform: uppercase;
-                margin-top: 10px;
-            }
+        <div class="register-input-group">
+          <input type="text" id="DiachiRegister" name="Diachi" placeholder="Địa chỉ" required>
+        </div>
 
-            .login-btn:hover {
-                background: #F57C00;
-                transform: translateY(-2px);
-                box-shadow: 0 5px 15px rgba(255, 152, 0, 0.3);
-            }
+        <button type="button" class="register-btn" id="btnDangKyPopup">Đăng ký</button>
 
-            .login-btn:active {
-                transform: translateY(0);
-            }
+        <div class="register-divider"><span>Hoặc đăng ký với</span></div>
 
-            .divider {
-                text-align: center;
-                margin: 30px 0;
-                position: relative;
-            }
+        <div class="register-social-login">
+          <button type="button" class="register-social-btn register-google-btn" onclick="alert('Đang phát triển!')">
+            <i class="fab fa-google"></i> Google
+          </button>
+          <button type="button" class="register-social-btn register-facebook-btn" onclick="alert('Đang phát triển!')">
+            <i class="fab fa-facebook-f"></i> Facebook
+          </button>
+        </div>
 
-            .divider::before {
-                content: '';
-                position: absolute;
-                left: 0;
-                top: 50%;
-                width: 100%;
-                height: 1px;
-                background: #e0e0e0;
-            }
+        <div class="register-login-link">
+          Đã có tài khoản?
+          <a href="#" onclick="event.preventDefault(); openPopup('Pages/DangNhap.jsp');">Đăng nhập ngay</a>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
 
-            .divider span {
-                background: white;
-                padding: 0 15px;
-                position: relative;
-                color: #666;
-                font-size: 14px;
-            }
+<script>
+$('#togglePasswordRegister').click(function () {
+  const input = $('#PasswordRegister');
+  const type = input.attr('type') === 'password' ? 'text' : 'password';
+  input.attr('type', type);
+  $(this).toggleClass('fa-eye fa-eye-slash');
+});
 
-            .social-login {
-                display: flex;
-                gap: 15px;
-                margin-bottom: 25px;
-            }
+$('#btnDangKyPopup').click(function () {
+  const data = {
+    Username: $('#UsernameRegister').val(),
+    Password: $('#PasswordRegister').val(),
+    Hoten: $('#HotenRegister').val(),
+    Email: $('#EmailRegister').val(),
+    Sodienthoai: $('#SodienthoaiRegister').val(),
+    Diachi: $('#DiachiRegister').val()
+  };
 
-            .social-btn {
-                flex: 1;
-                padding: 13px;
-                border: none;
-                border-radius: 8px;
-                font-size: 14px;
-                font-weight: 600;
-                cursor: pointer;
-                transition: all 0.3s;
-                color: white;
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                gap: 8px;
-            }
+  for (const key in data)
+    if (!data[key]) return showPopup("Vui lòng nhập đầy đủ thông tin!", "error");
 
-            .social-btn:hover {
-                transform: translateY(-2px);
-                box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
-            }
+  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(data.Email))
+    return showPopup("Email không hợp lệ!", "error");
 
-            .google-btn {
-                background: #DB4437;
-            }
+  if (!/^[0-9]{10}$/.test(data.Sodienthoai))
+    return showPopup("Số điện thoại phải có 10 chữ số!", "error");
 
-            .facebook-btn {
-                background: #4267B2;
-            }
+  if (data.Password.length < 6)
+    return showPopup("Mật khẩu phải có ít nhất 6 ký tự!", "error");
 
-            .register-link {
-                text-align: center;
-                color: #666;
-                font-size: 14px;
-            }
+  $.ajax({
+    url: "DangKy",
+    method: "POST",
+    data,
+    success: function (res) {
+      if (res.status === "success") {
+        showPopup(res.message, "success");
+        closePopup();
+        setTimeout(() => openPopup("Pages/DangNhap.jsp"), 1500);
+      } else showPopup(res.message, "error");
+    },
+    error: function () {
+      showPopup("Lỗi kết nối tới server!", "error");
+    }
+  });
+});
 
-            .register-link a {
-                color: #4a7c0c;
-                text-decoration: none;
-                font-weight: 600;
-            }
-
-            .register-link a:hover {
-                text-decoration: underline;
-            }
-
-            @media (max-width: 600px) {
-                .modal-content {
-                    margin: 20px;
-                }
-
-                .modal-header {
-                    padding: 30px 20px;
-                }
-
-                .modal-body {
-                    padding: 30px 20px;
-                }
-
-                .modal-logo {
-                    font-size: 28px;
-                }
-
-                .modal-header h2 {
-                    font-size: 24px;
-                }
-
-                .form-options {
-                    flex-direction: column;
-                    gap: 10px;
-                    align-items: flex-start;
-                }
-            }
-        </style>
-
-    </head>
-    <body>
-        <form action="${pageContext.request.contextPath}/DangKy" method="Post">
-            <label>Tài khoản</label>
-            <input type="text" id="Username" name="Username" required><br>
-            <label>Mật khẩu</label>
-            <input type="text" id="Password" name="Password" required><br>
-            <label>Họ tên</label>
-            <input type="text" id="Hoten" name="Hoten" required><br>
-            <label>Email</label>
-            <input type="text" id="Email" name="Email" required><br>
-            <label>Số điện thoại</label>
-            <input type="text" id="Sodienthoai" name="Sodienthoai" required><br>
-            <label>Địa chỉ</label>
-            <input type="text" id="Diachi" name="Diachi" required><br>
-            <button type="submit">Đăng nhập</button>
-        </form>
-    </body>
-</html>
+$('#registerFormPopup input').keypress(function (e) {
+  if (e.which === 13) $('#btnDangKyPopup').click();
+});
+</script>
