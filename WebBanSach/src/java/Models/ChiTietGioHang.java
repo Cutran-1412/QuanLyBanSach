@@ -13,7 +13,15 @@ public class ChiTietGioHang {
     private String MaGioHang;
     private String MaSach;
     private int SoLuong;
+    private Sach sach;
 
+    public Sach getSach() {
+        return sach;
+    }
+
+    public void setSach(Sach sach) {
+        this.sach = sach;
+    }
     public ChiTietGioHang() {
     }
 

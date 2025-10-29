@@ -166,6 +166,9 @@
         <header>
             <div >
                 <h1>Quyền admin</h1>
+                <a href="DangNhap" class="logout_btn">
+                            <i class="fa fa-sign-out"></i> Đăng xuất
+                </a>
             </div>
         </header>
         <section>

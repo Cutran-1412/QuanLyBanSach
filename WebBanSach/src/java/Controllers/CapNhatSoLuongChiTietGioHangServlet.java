@@ -5,10 +5,6 @@
 
 package Controllers;
 
-import DAO.ChiTietGioHangDAO;
-import DAO.GioHangDAO;
-import Models.ChiTietGioHang;
-import Models.GioHang;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
@@ -16,17 +12,13 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import jakarta.servlet.http.HttpSession;
-import java.time.LocalDate;
-import java.sql.Date;
-import java.util.List;
 
 /**
  *
  * @author Osiris
  */
-@WebServlet(name="GioHang", urlPatterns={"/GioHang"})
-public class GioHangServlet extends HttpServlet {
+@WebServlet(name="CapNhatSoLuongChiTietGioHang", urlPatterns={"/CapNhatSoLuongChiTietGioHang"})
+public class CapNhatSoLuongChiTietGioHangServlet extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code> methods.
@@ -43,10 +35,10 @@ public class GioHangServlet extends HttpServlet {
             out.println("<!DOCTYPE html>");
             out.println("<html>");
             out.println("<head>");
-            out.println("<title>Servlet GioHangServlet</title>");
+            out.println("<title>Servlet CapNhatSoLuongChiTietGioHangServlet</title>");
             out.println("</head>");
             out.println("<body>");
-            out.println("<h1>Servlet GioHangServlet at " + request.getContextPath () + "</h1>");
+            out.println("<h1>Servlet CapNhatSoLuongChiTietGioHangServlet at " + request.getContextPath () + "</h1>");
             out.println("</body>");
             out.println("</html>");
         }
@@ -63,25 +55,13 @@ public class GioHangServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
     throws ServletException, IOException {
-        String makhachhang = request.getParameter("MaNguoiDung");
-        GioHangDAO ghDAO = new GioHangDAO();
-        GioHang gh = ghDAO.getGioHangByNguoiDung(makhachhang);
-        if(gh == null){
-            GioHang ghnew = new GioHang(ghDAO.getMa(), makhachhang, Date.valueOf(LocalDate.now()));
-            ghDAO.Insert(ghnew);
-        }
-        gh = ghDAO.getGioHangByNguoiDung(makhachhang);
-        ChiTietGioHangDAO ctgh = new ChiTietGioHangDAO();
-        List<ChiTietGioHang> listctgh = ctgh.getByMaGioHang(gh.getMaGioHang());
-        request.setAttribute("GioHang", gh);
-        request.setAttribute("ListChiTietGioHang", listctgh);
-        request.getRequestDispatcher("Pages/GioHang.jsp").forward(request, response);
+        processRequest(request, response);
     }
 
     /**
      * Handles the HTTP <code>POST</code> method.
      * @param request servlet request
-     * @param response servlet responseG
+     * @param response servlet response
      * @throws ServletException if a servlet-specific error occurs
      * @throws IOException if an I/O error occurs
      */

@@ -80,7 +80,7 @@
                         <span class="user_info">
                             <i class="fa fa-user"></i> Xin chào, <b><%=nd.getHoTen() %></b>
                         </span>
-                        <a href="#" class="cart_icon" onclick="loadPage('GioHang')">
+                        <a href="#" class="cart_icon" onclick="loadPage('GioHang?MaNguoiDung=<%= nd.getMaNguoiDung() %>')">
                             <i class="fa fa-shopping-cart"></i>
                         </a>
                         <a href="DangNhap" class="logout_btn">

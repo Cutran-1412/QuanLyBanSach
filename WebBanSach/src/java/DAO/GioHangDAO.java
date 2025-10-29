@@ -5,6 +5,7 @@
 package DAO;
 
 import Models.DonHang;
+import Models.GioHang;
 import java.util.ArrayList;
 import java.util.List;
 import java.sql.*;
@@ -14,22 +15,20 @@ import java.sql.*;
  * @author Admin
  */
 public class GioHangDAO {
-    public List<DonHang> getData() {
-        List<DonHang> list = new ArrayList<>();
-        String sql = "SELECT * FROM donhang";
+    public List<GioHang> getData() {
+        List<GioHang> list = new ArrayList<>();
+        String sql = "SELECT * FROM GioHang";
         try (Connection conn = DBConnection.getConnection();
              Statement st = conn.createStatement();
              ResultSet rs = st.executeQuery(sql)) {
             
             while (rs.next()) {
-                DonHang dh = new DonHang(
-                        rs.getString("MaDonHang"),
+                GioHang gh = new GioHang(
+                        rs.getString("MaGioHang"),
                         rs.getString("MaNguoiDung"),
-                        rs.getDate("NgayDat"),
-                        rs.getString("TrangThai"),
-                        rs.getDouble("TongTien")
+                        rs.getDate("NgayTao")
                 );
-                list.add(dh);
+                list.add(gh);
             }
         } catch (Exception e) {
         }
@@ -37,36 +36,32 @@ public class GioHangDAO {
     }
 
     // Lấy đơn hàng theo mã
-    public DonHang getById(String maDonHang) {
-        String sql = "SELECT * FROM donhang WHERE MaDonHang=?";
+    public GioHang getById(String maGioHang) {
+        String sql = "SELECT * FROM GioHang WHERE MaGioHang=?";
         try (Connection conn = DBConnection.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql)) {
             
-            ps.setString(1, maDonHang);
+            ps.setString(1, maGioHang);
             ResultSet rs = ps.executeQuery();
             if (rs.next()) {
-                return new DonHang(
-                        rs.getString("MaDonHang"),
+                return new GioHang(
+                        rs.getString("MaGioHang"),
                         rs.getString("MaNguoiDung"),
-                        rs.getDate("NgayDat"),
-                        rs.getString("TrangThai"),
-                        rs.getDouble("TongTien")
+                        rs.getDate("NgayTao")
                 );
             }
         } catch (Exception e) {
         }
         return null;
     }
-    public void Insert(DonHang dh) {
-        String sql = "INSERT INTO donhang (MaDonHang, MaNguoiDung, NgayDat, TrangThai, TongTien) VALUES (?, ?, ?, ?, ?)";
+    public void Insert(GioHang gh) {
+        String sql = "INSERT INTO GioHang (`MaGioHang`, `MaNguoiDung`, `NgayTao`) VALUES (?,?,?)";
         try (Connection conn = DBConnection.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql)) {
             
-            ps.setString(1, dh.getMaDonHang());
-            ps.setString(2, dh.getMaNguoiDung());
-            ps.setDate(3, dh.getNgayDat());
-            ps.setString(4, dh.getTrangThai());
-            ps.setDouble(5, dh.getTongTien());
+            ps.setString(1, gh.getMaGioHang());
+            ps.setString(2, gh.getMaNguoiDung());
+            ps.setDate(3,gh.getNgayTao());
             ps.executeUpdate();
             System.out.println("Thêm đơn hàng thành công!");
         } catch (Exception e) {
@@ -102,5 +97,45 @@ public class GioHangDAO {
         } catch (Exception e) {
         }
     }
+     public GioHang getGioHangByNguoiDung(String maNguoiDung) {
+        String sql = "SELECT * FROM GioHang WHERE MaNguoiDung = ?";
+        try (Connection conn = DBConnection.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+            
+            ps.setString(1, maNguoiDung);
+            ResultSet rs = ps.executeQuery();
+            
+            if (rs.next()) {
+                GioHang gh = new GioHang();
+                gh.setMaGioHang(rs.getString("MaGioHang"));
+                gh.setMaNguoiDung(rs.getString("MaNguoiDung"));
+                gh.setNgayTao(rs.getDate("NgayTao"));
+                return gh;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+    public String getMa() {
+        String prefix = "GH";
+        String sql = "SELECT MaGioHang FROM GioHang ORDER BY MaGioHang DESC LIMIT 1";
 
+        try (Connection conn = DBConnection.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql);
+             ResultSet rs = ps.executeQuery()) {
+
+            if (rs.next()) {
+                String lastId = rs.getString("MaGioHang"); // VD: GH005
+                int number = Integer.parseInt(lastId.substring(2)); // lấy 5
+                return prefix + String.format("%02d", number + 1); // GH006
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        // Nếu chưa có bản ghi nào thì trả về mã đầu tiên
+        return prefix + "01";
+    }
 }

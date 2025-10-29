@@ -5,6 +5,7 @@
 package DAO;
 
 import Models.ChiTietGioHang;
+import Models.Sach;
 import java.util.ArrayList;
 import java.util.List;
 import java.sql.*;
@@ -77,5 +78,59 @@ public class ChiTietGioHangDAO {
             e.printStackTrace();
         }
     }
+    public List<ChiTietGioHang> getByMaGioHang(String maGioHang) {
+        List<ChiTietGioHang> list = new ArrayList<>();
+        String sql = """
+            SELECT ct.*, s.TenSach, s.Gia, s.Anh
+            FROM chitietgiohang ct
+            JOIN sach s ON ct.MaSach = s.MaSach
+            WHERE ct.MaGioHang = ?
+        """;
 
+        try (Connection conn = DBConnection.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+
+            ps.setString(1, maGioHang);
+            ResultSet rs = ps.executeQuery();
+
+            while (rs.next()) {
+                ChiTietGioHang ct = new ChiTietGioHang(
+                    rs.getString("MaChiTiet"),
+                    rs.getString("MaGioHang"),
+                    rs.getString("MaSach"),
+                    rs.getInt("SoLuong")
+                );
+                Sach s = new Sach();
+                s.setTenSach(rs.getString("TenSach"));
+                s.setGia(rs.getDouble("Gia"));
+                s.setAnh(rs.getString("Anh"));
+                ct.setSach(s); 
+                list.add(ct);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return list;
+    }
+    public String getMa() {
+        String newId = "CTGH0001";
+        String sql = "SELECT MaChiTiet FROM chitietgiohang ORDER BY MaChiTiet DESC LIMIT 1";
+
+        try (Connection conn = DBConnection.getConnection();
+             Statement st = conn.createStatement();
+             ResultSet rs = st.executeQuery(sql)) {
+
+            if (rs.next()) {
+                String lastId = rs.getString("MaChiTiet");
+                int number = Integer.parseInt(lastId.substring(4));
+                number++; // tăng lên 1
+                newId = String.format("CTGH%04d", number);
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return newId;
+    }
 }

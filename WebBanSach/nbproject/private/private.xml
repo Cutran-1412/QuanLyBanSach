@@ -1,6 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project-private xmlns="http://www.netbeans.org/ns/project-private/1">
-    <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="1">
+    <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="2">
+        <file>
+            <url>src/java/Controllers/HomeServlet.java</url>
+            <bookmark id="2">
+                <name/>
+                <line>60</line>
+                <key/>
+            </bookmark>
+        </file>
         <file>
             <url>web/Pages/DangKi.jsp</url>
             <bookmark id="1">
@@ -12,13 +20,9 @@
     </editor-bookmarks>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/D:/Projeck/QuanLyBanSach/WebBanSach/web/WEB-INF/web.xml</file>
-            <file>file:/D:/Projeck/QuanLyBanSach/WebBanSach/web/Admin/Pages/ThemSach.jsp</file>
-            <file>file:/D:/Projeck/QuanLyBanSach/WebBanSach/web/TrangChuStyle.css</file>
-            <file>file:/D:/Projeck/QuanLyBanSach/WebBanSach/src/java/Controllers/HomeServlet.java</file>
+            <file>file:/D:/Projeck/QuanLyBanSach/WebBanSach/web/Pages/DangNhap.jsp</file>
+            <file>file:/D:/Projeck/QuanLyBanSach/WebBanSach/web/Pages/DangKy.jsp</file>
             <file>file:/D:/Projeck/QuanLyBanSach/WebBanSach/web/TrangChu.jsp</file>
-            <file>file:/D:/Projeck/QuanLyBanSach/WebBanSach/web/index.html</file>
-            <file>file:/D:/Projeck/QuanLyBanSach/WebBanSach/web/Admin/Pages/TheLoai.jsp</file>
         </group>
     </open-files>
 </project-private>
