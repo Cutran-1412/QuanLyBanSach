@@ -5,6 +5,7 @@
 package DAO;
 
 import Models.ChiTietGioHang;
+import Models.GioHang;
 import Models.Sach;
 import java.util.ArrayList;
 import java.util.List;
@@ -77,6 +78,26 @@ public class ChiTietGioHangDAO {
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+    public ChiTietGioHang getByMa(String maGioHang){
+        String sql = "SELECT * FROM chitietgiohang MaGioHang=?";
+        try (Connection conn = DBConnection.getConnection();
+            PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setString(1, maGioHang);
+            ResultSet rs = ps.executeQuery();
+             if (rs.next()) {
+                return new ChiTietGioHang(
+                    rs.getString("MaChiTiet"),
+                    rs.getString("MaGioHang"),
+                    rs.getString("MaSach"),
+                    rs.getInt("SoLuong")
+                );
+            }
+            System.out.println("Cập nhật chi tiết giỏ hàng thành công!");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
     }
     public List<ChiTietGioHang> getByMaGioHang(String maGioHang) {
         List<ChiTietGioHang> list = new ArrayList<>();

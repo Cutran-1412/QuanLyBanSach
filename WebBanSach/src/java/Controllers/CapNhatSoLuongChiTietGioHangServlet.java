@@ -5,6 +5,9 @@
 
 package Controllers;
 
+import DAO.ChiTietGioHangDAO;
+import DAO.GioHangDAO;
+import Models.ChiTietGioHang;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
@@ -12,12 +15,16 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import java.math.BigDecimal;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  *
  * @author Osiris
  */
 @WebServlet(name="CapNhatSoLuongChiTietGioHang", urlPatterns={"/CapNhatSoLuongChiTietGioHang"})
+
 public class CapNhatSoLuongChiTietGioHangServlet extends HttpServlet {
 
     /**
@@ -68,7 +75,61 @@ public class CapNhatSoLuongChiTietGioHangServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
     throws ServletException, IOException {
-        processRequest(request, response);
+        response.setContentType("application/json;charset=UTF-8");
+        request.setCharacterEncoding("UTF-8");
+
+        PrintWriter out = response.getWriter();
+
+        try {
+            String maChiTiet = request.getParameter("maChiTiet");
+            String action = request.getParameter("action");
+
+            if (maChiTiet == null || maChiTiet.isEmpty() || 
+                (!"tang".equals(action) && !"giam".equals(action))) {
+                response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+                out.write("{\"error\":\"Dữ liệu không hợp lệ\"}");
+                return;
+            }
+
+            ChiTietGioHangDAO ctDAO = new ChiTietGioHangDAO();
+            GioHangDAO ghDAO = new GioHangDAO();
+
+            ChiTietGioHang ct = ctDAO.getByMa(maChiTiet);
+
+            if (ct == null) {
+                response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+                out.write("{\"error\":\"Chi tiết giỏ hàng không tồn tại\"}");
+                return;
+            }
+
+            int soLuongMoi = ct.getSoLuong();
+            if ("tang".equals(action)) {
+                soLuongMoi++;
+            } else if ("giam".equals(action) && soLuongMoi > 1) {
+                soLuongMoi--;
+            }
+
+            ct.setSoLuong(soLuongMoi);
+            ctDAO.Update(ct);
+
+            double thanhTienMoi = soLuongMoi * ct.getSach().getGia();
+            BigDecimal tongCong = ghDAO.tinhTongTien(ct.getMaGioHang());
+
+            // Tạo JSON thủ công
+            String json = String.format(
+                "{\"soLuongMoi\":%d,\"thanhTienMoi\":\"%,.0f\",\"tongCong\":\"%,.0f\"}",
+                soLuongMoi, thanhTienMoi, tongCong
+            );
+
+            out.write(json);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+            out.write("{\"error\":\"Lỗi server khi cập nhật giỏ hàng\"}");
+        } finally {
+            out.close();
+        }
     }
 
     /**

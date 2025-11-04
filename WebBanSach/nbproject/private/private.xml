@@ -20,9 +20,11 @@
     </editor-bookmarks>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/D:/Projeck/QuanLyBanSach/WebBanSach/web/Pages/DangNhap.jsp</file>
-            <file>file:/D:/Projeck/QuanLyBanSach/WebBanSach/web/Pages/DangKy.jsp</file>
+            <file>file:/D:/Projeck/QuanLyBanSach/WebBanSach/src/java/Controllers/CapNhatSoLuongChiTietGioHangServlet.java</file>
+            <file>file:/D:/Projeck/QuanLyBanSach/WebBanSach/web/Pages/GioHang.jsp</file>
+            <file>file:/D:/Projeck/QuanLyBanSach/WebBanSach/src/java/DAO/GioHangDAO.java</file>
             <file>file:/D:/Projeck/QuanLyBanSach/WebBanSach/web/TrangChu.jsp</file>
+            <file>file:/D:/Projeck/QuanLyBanSach/WebBanSach/src/java/DAO/ChiTietGioHangDAO.java</file>
         </group>
     </open-files>
 </project-private>

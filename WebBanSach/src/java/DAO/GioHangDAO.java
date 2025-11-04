@@ -4,8 +4,10 @@
  */
 package DAO;
 
+import Models.ChiTietGioHang;
 import Models.DonHang;
 import Models.GioHang;
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 import java.sql.*;
@@ -137,5 +139,18 @@ public class GioHangDAO {
 
         // Nếu chưa có bản ghi nào thì trả về mã đầu tiên
         return prefix + "01";
+    }
+    public BigDecimal tinhTongTien(String maGioHang) {
+        BigDecimal tong = BigDecimal.ZERO;
+        ChiTietGioHangDAO ctDAO = new ChiTietGioHangDAO();
+        List<ChiTietGioHang> list = ctDAO.getByMaGioHang(maGioHang);
+        if (list != null) {
+            for (ChiTietGioHang ct : list) {
+                BigDecimal thanhTien = BigDecimal.valueOf(ct.getSach().getGia())
+                                            .multiply(BigDecimal.valueOf(ct.getSoLuong()));
+                tong = tong.add(thanhTien);
+            }
+        }
+        return tong;
     }
 }

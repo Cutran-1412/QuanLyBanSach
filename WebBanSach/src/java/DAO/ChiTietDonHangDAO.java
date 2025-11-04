@@ -66,8 +66,6 @@ public class ChiTietDonHangDAO {
             e.printStackTrace();
         }
     }
-
-    // Xóa
     public void Delete(String maChiTiet) {
         String sql = "DELETE FROM chitietdonhang WHERE MaChiTiet=?";
         try (Connection conn = DBConnection.getConnection();
@@ -78,5 +76,26 @@ public class ChiTietDonHangDAO {
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+    public ChiTietDonHang getByMa(String maChiTiet) {
+        String sql = "SELECT * FROM chitietdonhang WHERE MaChiTiet = ?";
+        try (Connection conn = DBConnection.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setString(1, maChiTiet);
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    return new ChiTietDonHang(
+                            rs.getString("MaChiTiet"),
+                            rs.getString("MaDonHang"),
+                            rs.getString("MaSach"),
+                            rs.getInt("SoLuong"),
+                            rs.getDouble("DonGia")
+                    );
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null; // Không tìm thấy
     }
 }
