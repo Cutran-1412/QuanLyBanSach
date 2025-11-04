@@ -94,9 +94,10 @@ public class DangKyServlet extends HttpServlet {
             }
             return;
         }
-        NguoiDung nd = new NguoiDung(ndDAO.getMa(), user,pass ,hoten, email, sodienthoai, diachi, false);
-        
+        NguoiDung nd = new NguoiDung(ndDAO.getMa(), user,pass ,hoten, email, sodienthoai, diachi, false);  
         ndDAO.Insert(nd);
+        HomeServlet home = new HomeServlet();
+        home.doGet(request, response);
     }
 
     /**

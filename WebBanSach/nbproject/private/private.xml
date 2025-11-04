@@ -20,11 +20,17 @@
     </editor-bookmarks>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
+<<<<<<< HEAD
             <file>file:/D:/Projeck/QuanLyBanSach/WebBanSach/src/java/Controllers/CapNhatSoLuongChiTietGioHangServlet.java</file>
             <file>file:/D:/Projeck/QuanLyBanSach/WebBanSach/web/Pages/GioHang.jsp</file>
             <file>file:/D:/Projeck/QuanLyBanSach/WebBanSach/src/java/DAO/GioHangDAO.java</file>
             <file>file:/D:/Projeck/QuanLyBanSach/WebBanSach/web/TrangChu.jsp</file>
             <file>file:/D:/Projeck/QuanLyBanSach/WebBanSach/src/java/DAO/ChiTietGioHangDAO.java</file>
+=======
+            <file>file:/C:/Users/Xuan%20Duy/Tài%20liệu/NetBeansProjects/QuanLyBanSach/WebBanSach/web/Pages/DangNhap.jsp</file>
+            <file>file:/C:/Users/Xuan%20Duy/Tài%20liệu/NetBeansProjects/QuanLyBanSach/WebBanSach/web/Pages/DangKy.jsp</file>
+            <file>file:/C:/Users/Xuan%20Duy/Tài%20liệu/NetBeansProjects/QuanLyBanSach/WebBanSach/web/TrangChu.jsp</file>
+>>>>>>> 1900bb177ca7f6d2f1ed797f058b7a251bc8e37b
         </group>
     </open-files>
 </project-private>

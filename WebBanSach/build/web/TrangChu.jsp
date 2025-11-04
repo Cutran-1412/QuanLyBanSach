@@ -11,30 +11,72 @@
         <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
         <style>
-            /* Popup nổi */
-            #popupMessage {
+            .popup-overlay {
                 position: fixed;
-                top: 30px;
-                left: 50%;
-                transform: translateX(-50%);
-                background-color: #333;
-                color: #fff;
-                padding: 12px 20px;
-                border-radius: 8px;
-                box-shadow: 0 4px 10px rgba(0,0,0,0.2);
-                font-size: 16px;
-                z-index: 9999;
-                display: none;
-                opacity: 0;
-                transition: opacity 0.5s ease, top 0.5s ease;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                background: rgba(0,0,0,0.6);
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                z-index: 9999; /* nổi trên tất cả */
             }
-            #popupMessage.show {
-                display: block;
-                opacity: 1;
-                top: 60px;
+
+            /* KHUNG POPUP CHÍNH */
+            .popup-box {
+                background: #fff;
+                padding: 25px 30px;
+                border-radius: 10px;
+                box-shadow: 0 0 20px rgba(0,0,0,0.3);
+                width: 420px;
+                max-width: 90%;
+                position: relative;
+                animation: popupFadeIn 0.3s ease;
             }
-           
-        </style>
+
+            /* NÚT ĐÓNG (X) */
+            .close-btn {
+                position: absolute;
+                top: 10px;
+                right: 15px;
+                font-size: 24px;
+                color: #666;
+                cursor: pointer;
+                transition: 0.2s;
+            }
+            .close-btn:hover {
+                color: #e74c3c;
+                transform: scale(1.2);
+            }
+
+            /* HIỆU ỨNG MỞ MƯỢT */
+            @keyframes popupFadeIn {
+                from { opacity: 0; transform: scale(0.9); }
+                to { opacity: 1; transform: scale(1); }
+            }
+            </style>
+
+            <script>
+            function openPopup(url) {
+                $.ajax({
+                    url: url,
+                    method: "GET",
+                    success: function (response) {
+                        $("#popup-content").html(response);
+                        $("#popup").fadeIn(200);
+                    },
+                    error: function () {
+                        alert("Không thể tải trang!");
+                    }
+                });
+            }
+
+            function closePopup() {
+                $("#popup").fadeOut(200);
+            }
+        </script>
     </head>
     <body>
         <div id="popupMessage"></div>
@@ -114,7 +156,6 @@
                 </ul>
             </div>
             <div id="content" class="content_div">
-                <h2 style="text-align: center">Danh sách sách</h2>
                 <div class="book_container">
                     <% List<Sach> list = (List<Sach>) request.getAttribute("SachDB");
                        if (list != null && !list.isEmpty()) {
@@ -130,9 +171,8 @@
                 </div>
             </div>
         </section>
-                <div id="popup" class="popup-overlay" style="display:none;">
-        <div class="popup-box">
-            <span class="close-btn" onclick="closePopup()">&times;</span>
+        <div id="popup" class="popup-overlay" style="display:none;">
+            <span class="close-btn" onclick="closePopup()">×</span>
             <div id="popup-content"></div>
         </div>
     </div>
