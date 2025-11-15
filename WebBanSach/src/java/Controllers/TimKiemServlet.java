@@ -5,10 +5,10 @@
 
 package Controllers;
 
-import DAO.NguoiDungDAO;
 import DAO.SachDAO;
-import Models.NguoiDung;
+import DAO.TheLoaiDAO;
 import Models.Sach;
+import Models.TheLoai;
 import jakarta.servlet.RequestDispatcher;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -17,15 +17,14 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import jakarta.servlet.http.HttpSession;
 import java.util.List;
 
 /**
  *
  * @author Osiris
  */
-@WebServlet(name="DangNhap", urlPatterns={"/DangNhap"})
-public class DangNhapServlet extends HttpServlet {
+@WebServlet(name="TimKiem", urlPatterns={"/TimKiem"})
+public class TimKiemServlet extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code> methods.
@@ -42,10 +41,10 @@ public class DangNhapServlet extends HttpServlet {
             out.println("<!DOCTYPE html>");
             out.println("<html>");
             out.println("<head>");
-            out.println("<title>Servlet DangNhapServlet</title>");
+            out.println("<title>Servlet TimKiemServlet</title>");
             out.println("</head>");
             out.println("<body>");
-            out.println("<h1>Servlet DangNhapServlet at " + request.getContextPath () + "</h1>");
+            out.println("<h1>Servlet TimKiemServlet at " + request.getContextPath () + "</h1>");
             out.println("</body>");
             out.println("</html>");
         }
@@ -62,11 +61,15 @@ public class DangNhapServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
     throws ServletException, IOException {
-        HttpSession session = request.getSession(false);
-        if (session != null) {
-            session.invalidate();
-        }
-        response.sendRedirect("Home");
+        String matl = request.getParameter("MaTheLoai");
+        SachDAO dao = new SachDAO();
+        List<Sach> list = dao.getSachByTheLoai(matl);
+        request.setAttribute("SachDB", list);
+        TheLoaiDAO tldao = new TheLoaiDAO();
+        List<TheLoai> ltl= tldao.getData();
+        request.setAttribute("TheLoai", ltl);
+        RequestDispatcher dispatcher = request.getRequestDispatcher("/TrangChu.jsp");
+        dispatcher.forward(request, response);
     }
 
     /**
@@ -79,34 +82,15 @@ public class DangNhapServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
     throws ServletException, IOException {
-        String user = request.getParameter("Username");
-        String pass = request.getParameter("Password");
-        
-        HttpSession sesion  = request.getSession();
-        NguoiDungDAO ndDAO = new NguoiDungDAO();
-        NguoiDung nd = ndDAO.SignIn(user, pass);
-        if(nd ==null){
-            HttpSession session = request.getSession();
-            session.setAttribute("message", "Sai tài khoản hoặc mật khẩu");
-            session.setAttribute("msgType", "error"); 
-            response.sendRedirect("Home");
-        }
-        else{
-            if(nd.isVaiTro()){
-                sesion.setAttribute("nd",nd);
-                AdminServlet adm = new AdminServlet();
-                adm.doGet(request, response);
-            }
-            else{
-                
-                sesion.setAttribute("nd",nd);
-                HomeServlet home = new HomeServlet();
-                HttpSession session = request.getSession();
-                session.setAttribute("message", "Đăng nhập thành công!");
-                session.setAttribute("msgType", "success"); 
-                home.doGet(request, response);
-            }
-        }
+        String tensanpham= request.getParameter("TenSanPham");
+        SachDAO dao = new SachDAO();
+        List<Sach> list = dao.getByName(tensanpham);
+        request.setAttribute("SachDB", list);
+        TheLoaiDAO tldao = new TheLoaiDAO();
+        List<TheLoai> ltl= tldao.getData();
+        request.setAttribute("TheLoai", ltl);
+        RequestDispatcher dispatcher = request.getRequestDispatcher("/TrangChu.jsp");
+        dispatcher.forward(request, response);
     }
 
     /**

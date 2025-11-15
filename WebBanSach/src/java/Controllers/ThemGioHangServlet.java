@@ -17,6 +17,7 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
 import java.sql.Date;
 import java.time.LocalDate;
 
@@ -64,7 +65,8 @@ public class ThemGioHangServlet extends HttpServlet {
     throws ServletException, IOException {
         String masach = request.getParameter("MaSach");
         HomeServlet home = new HomeServlet();
-        NguoiDung nd = home.nd;
+        HttpSession sesion  = request.getSession();
+        NguoiDung nd = (NguoiDung)sesion.getAttribute("nd");
         if(nd!=null){
             GioHangDAO ghDAO = new GioHangDAO();
             GioHang gh = ghDAO.getGioHangByNguoiDung(nd.getMaNguoiDung());

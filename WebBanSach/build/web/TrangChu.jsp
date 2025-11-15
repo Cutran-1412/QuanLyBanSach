@@ -1,3 +1,5 @@
+
+<%@page import="Models.TheLoai"%>
 <%@page import="Models.NguoiDung"%>
 <%@page import="Models.Sach"%>
 <%@page import="java.util.List"%>
@@ -10,102 +12,53 @@
         <link href="TrangChuStyle.css" rel="stylesheet" type="text/css"/>
         <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-        <style>
-            .popup-overlay {
-                position: fixed;
-                top: 0;
-                left: 0;
-                width: 100%;
-                height: 100%;
-                background: rgba(0,0,0,0.6);
-                display: flex;
-                justify-content: center;
-                align-items: center;
-                z-index: 9999; /* nổi trên tất cả */
-            }
-
-            /* KHUNG POPUP CHÍNH */
-            .popup-box {
-                background: #fff;
-                padding: 25px 30px;
-                border-radius: 10px;
-                box-shadow: 0 0 20px rgba(0,0,0,0.3);
-                width: 420px;
-                max-width: 90%;
-                position: relative;
-                animation: popupFadeIn 0.3s ease;
-            }
-
-            /* NÚT ĐÓNG (X) */
-            .close-btn {
-                position: absolute;
-                top: 10px;
-                right: 15px;
-                font-size: 24px;
-                color: #666;
-                cursor: pointer;
-                transition: 0.2s;
-            }
-            .close-btn:hover {
-                color: #e74c3c;
-                transform: scale(1.2);
-            }
-
-            /* HIỆU ỨNG MỞ MƯỢT */
-            @keyframes popupFadeIn {
-                from { opacity: 0; transform: scale(0.9); }
-                to { opacity: 1; transform: scale(1); }
-            }
-            </style>
-
-            <script>
-            function openPopup(url) {
-                $.ajax({
-                    url: url,
-                    method: "GET",
-                    success: function (response) {
-                        $("#popup-content").html(response);
-                        $("#popup").fadeIn(200);
-                    },
-                    error: function () {
-                        alert("Không thể tải trang!");
-                    }
-                });
-            }
-
-            function closePopup() {
-                $("#popup").fadeOut(200);
-            }
-        </script>
     </head>
     <body>
-        <div id="popupMessage"></div>
-        <script>
-            // Hàm hiển thị popup 3 giây
-            function showPopup(message, type = "success") {
-                const popup = document.getElementById("popupMessage");
-                popup.innerText = message;
-                popup.style.backgroundColor = type === "error" ? "#e74c3c" : "#2ecc71";
-                popup.classList.add("show");
-
-                setTimeout(() => {
-                    popup.classList.remove("show");
-                }, 3000);
-            }
-        </script>
-
-        <% 
-            // Lấy thông báo từ session
-            String tb = (String) session.getAttribute("ThongBao");
-            if (tb != null) { 
-        %>
-            <script>
-                showPopup("<%= tb %>");
-            </script>
+        
         <%
-            session.removeAttribute("ThongBao");
+            String msg = (String) session.getAttribute("message");
+            String msgType = (String) session.getAttribute("msgType");
+            if (msg != null) {
+        %>
+            <div id="toast" class="<%= msgType %>"><%= msg %></div>
+
+            <style>
+                #toast {
+                    position: fixed;
+                    top: 5%;    
+                    left: 40%;
+                    transform: translate(-50%, -50%);
+                    padding: 20px 40px;
+                    border-radius: 12px;
+                    font-size: 24px;
+                    color: white;
+                    font-weight: bold;
+                    font-family: sans-serif;
+                    box-shadow: 0 6px 20px rgba(0,0,0,.3);
+                    opacity: 0;
+                    animation: fadeSlide 0.5s forwards, disappear 3s forwards 2.5s;
+                    z-index: 9999;
+                    text-align: center;
+
+                }
+                #toast.success { background: #28a745; }
+                #toast.error   { background: #dc3545; }
+                #toast.warning { background: #ffc107; color: black; }
+
+                @keyframes fadeSlide {
+                    to { opacity: 1; transform: translateY(0); }
+                }
+                @keyframes disappear {
+                    to { opacity: 0; transform: translateY(-20px); }
+                }
+            </style>
+
+        <%
+                session.removeAttribute("message");
+                session.removeAttribute("msgType");
             }
         %>
+
         <header class="head_bar">
             <div class="left_info">
                 <a>0999999999</a>
@@ -114,7 +67,8 @@
             </div>
             <div class="right_action">
                 <%
-                    NguoiDung nd = (NguoiDung) request.getAttribute("NguoiDung");
+                    HttpSession sesion  = request.getSession();
+                    NguoiDung nd = (NguoiDung) sesion.getAttribute("nd");
                     if (nd == null) {%>
                         <a href="#" class="btn_login" onclick="openPopup('Pages/DangNhap.jsp')">ĐĂNG NHẬP</a>
                         <a href="#" class="btn_register" onclick="openPopup('Pages/DangKy.jsp')">ĐĂNG KÝ</a>
@@ -133,28 +87,34 @@
         </header>
         
         <nav class="main_nav">
-            <a class="logo">websach.com</a>
-            <div class="search_nav">
-                <input type="text" placeholder="Tìm kiếm sản phầm">
-                <button class="search_btn">Tìm kiếm</button>
+            <a onclick="window.location.href='Home'" class="logo">Home</a>
+            <div class="search_nav" style="text-align: center;">
+                <form action="TimKiem" method="post" style="display: inline-block;">
+                    <input type="text" name="TenSanPham" placeholder="Tìm kiếm sản phẩm">
+                    <button type="submit" class="search_btn">Tìm kiếm</button>
+                </form>
             </div>
         </nav>
         
         <section class="main_section">
             <div class="category_div">
                 <ul class="category_bar">
+                    <%
+                        List<TheLoai> ltl = (List<TheLoai>)request.getAttribute("TheLoai");
+                    %>
                     <a>Danh mục</a>
-                    <li>Sách Kinh Tế</li>
-                    <li>Sách Văn Học Nước Ngoài</li>
-                    <li>Sách Văn Học Trong Nước</li>
-                    <li>Sách Thiếu Nhi</li>
-                    <li>Sách Tin Học</li>
-                    <li>Sách Giáo Khoa</li>
-                    <li>Sách Phát Hành 2024</li>
-                    <li>Sách Phát Hành 2025</li>
-                    <li>Sách Triết Học</li>
+                    <%
+                        if(ltl!=null){
+                            for(TheLoai item : ltl){%>
+                            <li onclick="window.location.href='TimKiem?MaTheLoai=<%= item.getMaTheLoai() %>'"><%=item.getTenTheLoai() %></li>    
+                        <%}
+                        }else{%>
+                            <li>Không có thể loại</li>
+                        <%}
+                    %> 
                 </ul>
             </div>
+                
             <div id="content" class="content_div">
                 <div class="book_container">
                     <% List<Sach> list = (List<Sach>) request.getAttribute("SachDB");
@@ -176,35 +136,6 @@
             <div id="popup-content"></div>
         </div>
     </div>
-        <script>
-            function loadPage(url) {
-                $.ajax({    
-                    url: url,
-                    method: "GET",
-                    success: function (response) {
-                        $("#content").html(response);
-                    },
-                    error: function () {
-                        $("#content").html("<p style='color:red;'>Lỗi khi tải dữ liệu!</p>");
-                    }
-                });
-            }
-            function openPopup(url) {
-                $.ajax({
-                    url: url,
-                    method: "GET",
-                    success: function (response) {
-                        $("#popup-content").html(response);
-                        $("#popup").show();
-                    },
-                    error: function () {
-                        alert("Không thể tải trang!");
-                    }
-                });
-            }
-            function closePopup() {
-                $("#popup").hide();
-            }
-        </script>
+    <script src="Assets/JS/TrangChujs.js" type="text/javascript"></script>
     </body>  
 </html>

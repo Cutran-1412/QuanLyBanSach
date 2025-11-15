@@ -1,8 +1,9 @@
 package Controllers;
-
 import DAO.SachDAO;
+import DAO.TheLoaiDAO;
 import Models.NguoiDung;
 import Models.Sach;
+import Models.TheLoai;
 import jakarta.servlet.RequestDispatcher;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -44,14 +45,16 @@ public class HomeServlet extends HttpServlet {
      * @throws ServletException if a servlet-specific error occurs
      * @throws IOException if an I/O error occurs
      */
-    public static NguoiDung nd = null;
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        
         SachDAO dao = new SachDAO();
         List<Sach> list = dao.getData();
         request.setAttribute("SachDB", list);
-        request.setAttribute("NguoiDung", nd);
+        TheLoaiDAO tldao = new TheLoaiDAO();
+        List<TheLoai> ltl= tldao.getData();
+        request.setAttribute("TheLoai", ltl);
         RequestDispatcher dispatcher = request.getRequestDispatcher("/TrangChu.jsp");
         dispatcher.forward(request, response);
     }

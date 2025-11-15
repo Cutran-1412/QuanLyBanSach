@@ -36,14 +36,14 @@
             label {
                 font-weight: bold;
             }
-            input {
+/*            input.Username,intput.password{    
                 width: 100%;
                 padding: 8px;
                 margin: 8px 0;
                 border: 1px solid #ccc;
                 border-radius: 4px;
-            }
-            button {
+            }*/
+            button.btnDangNhap {
                 width: 100%;
                 background-color: #007bff;
                 color: white;

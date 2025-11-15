@@ -14,7 +14,7 @@
         <style>
             body {
                 font-family: Arial, sans-serif;
-                background-color: #fafafa;
+/*                background-color: #fafafa;*/
             }
             .container {
                 width: 80%;
