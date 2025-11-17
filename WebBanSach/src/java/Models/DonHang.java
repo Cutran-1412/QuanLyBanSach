@@ -11,20 +11,25 @@ import java.sql.Date;
 public class DonHang {
     private String MaDonHang;
     private String MaNguoiDung;
+    private String DiaChiNhanHang;
     private Date NgayDat;
     private String TrangThai;
     private double TongTien;
-
     public DonHang() {
     }
 
-    public DonHang(String MaDonHang, String MaNguoiDung, Date NgayDat, String TrangThai, double TongTien) {
+    public DonHang(String MaDonHang, String MaNguoiDung, String DiaChiNhanHang, Date NgayDat, String TrangThai, double TongTien) {
         this.MaDonHang = MaDonHang;
         this.MaNguoiDung = MaNguoiDung;
+        this.DiaChiNhanHang = DiaChiNhanHang;
         this.NgayDat = NgayDat;
         this.TrangThai = TrangThai;
         this.TongTien = TongTien;
     }
+
+
+
+    
 
     public String getMaDonHang() {
         return MaDonHang;
@@ -65,5 +70,14 @@ public class DonHang {
     public void setTongTien(double TongTien) {
         this.TongTien = TongTien;
     }
+
+    public String getDiaChiNhanHang() {
+        return DiaChiNhanHang;
+    }
+
+    public void setDiaChiNhanHang(String DiaChiNhanHang) {
+        this.DiaChiNhanHang = DiaChiNhanHang;
+    }
+
     
 }

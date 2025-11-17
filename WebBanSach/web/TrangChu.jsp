@@ -77,8 +77,12 @@
                             <i class="fa fa-user"></i> Xin chào, <b><%=nd.getHoTen() %></b>
                         </span>
                         <a href="#" class="cart_icon" onclick="loadPage('GioHang?MaNguoiDung=<%= nd.getMaNguoiDung() %>')">
-                            <i class="fa fa-shopping-cart"></i>
+                            <i class="fa fa-shopping-cart"></i> Giỏ hàng
                         </a>
+                        <a href="#" class="order_icon"
+                            onclick="loadPage('DonHang?MaNguoiDung=<%= nd.getMaNguoiDung() %>')">
+                             <i class="fa fa-box"></i> Đơn hàng
+                         </a>
                         <a href="DangNhap" class="logout_btn">
                             <i class="fa fa-sign-out"></i> Đăng xuất
                         </a>

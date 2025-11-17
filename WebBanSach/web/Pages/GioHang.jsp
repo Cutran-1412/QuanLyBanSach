@@ -1,3 +1,10 @@
+<%-- 
+    Document   : DonHang
+    Created on : Nov 17, 2025, 5:05:03 PM
+    Author     : Osiris
+--%>
+
+
 <%@page import="Models.ChiTietGioHang"%>
 <%@page import="java.util.List"%>
 <%@page import="Models.GioHang"%>
@@ -69,19 +76,41 @@
             font-weight: bold;
             margin-top: 20px;
         }
-        .back-btn {
-            margin-top: 20px;
-            display: inline-block;
-            padding: 8px 18px;
-            background-color: #007BFF;
-            color: white;
-            text-decoration: none;
-            border-radius: 6px;
+        .checkout-area {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 25px;
         }
-        .back-btn:hover { background-color: #0056b3; }
+        .btn-primary, .btn-outline {
+            padding: 10px 20px;
+            border-radius: 8px;
+            font-weight: bold;
+            cursor: pointer;
+            font-size: 15px;
+            transition: 0.2s;
+        }
+        .btn-primary {
+            background-color: #28a745;
+            border: none;
+            color: white;
+        }
+        .btn-primary:hover {
+            background-color: #218838;
+        }
+        .btn-outline {
+            background: white;
+            border: 2px solid #4a90e2;
+            color: #4a90e2;
+        }
+        .btn-outline:hover {
+            background: #4a90e2;
+            color: white;
+        }
     </style>
 </head>
 <body>
+
 <%
     GioHang gh = (GioHang) request.getAttribute("GioHang");
     List<ChiTietGioHang> list = (List<ChiTietGioHang>) request.getAttribute("ListChiTietGioHang");
@@ -101,68 +130,128 @@
                 <th>Hành động</th>
             </tr>
         </thead>
+
         <tbody>
-            <%
+        <%
+            if (list == null || list.isEmpty()) {
+        %>
+            <tr>
+                <td colspan="6" style="padding: 20px; font-size: 18px; color: #777;">
+                    🛒 Giỏ hàng của bạn đang trống.
+                </td>
+            </tr>
+        <%
+            } else {
                 double tongTien = 0;
                 for (ChiTietGioHang ct : list) {
                     double thanhTien = ct.getSoLuong() * ct.getSach().getGia();
                     tongTien += thanhTien;
-            %>
+        %>
             <tr>
                 <td><img src="<%= ct.getSach().getAnh() %>" alt=""></td>
                 <td><%= ct.getSach().getTenSach() %></td>
                 <td><%= String.format("%,.0f", ct.getSach().getGia()) %> VNĐ</td>
+
                 <td>
-                    <div class="quantity-control" data-id="<%= ct.getMaChiTiet() %>">
-                        <button class="qty-btn minus">−</button>
-                        <input type="text" value="<%= ct.getSoLuong() %>" class="qty-input" readonly>
-                        <button class="qty-btn plus">+</button>
+                    <div style="display: flex; align-items: center; gap: 6px;">
+
+                        <button class="btn-minus"
+                                style="width: 32px; height: 32px; border-radius: 6px; border: 1px solid #ccc; background: #f3f3f3; cursor: pointer; font-size: 18px;"
+                                data-mact="<%= ct.getMaChiTiet() %>"
+                                data-magiohang="<%= ct.getMaGioHang() %>"
+                                data-masach="<%= ct.getMaSach() %>">−</button>
+
+                        <input type="text" class="sl"
+                               id="sl-<%= ct.getMaSach() %>"
+                               value="<%= ct.getSoLuong() %>"
+                               readonly
+                               style="width: 45px; height: 32px; text-align: center; border: 1px solid #ccc; border-radius: 6px; font-size: 15px; background: #fff;">
+
+                        <button class="btn-plus"
+                                style="width: 32px; height: 32px; border-radius: 6px; border: 1px solid #ccc; background: #f3f3f3; cursor: pointer; font-size: 18px;"
+                                data-mact="<%= ct.getMaChiTiet() %>"
+                                data-magiohang="<%= ct.getMaGioHang() %>"
+                                data-masach="<%= ct.getMaSach() %>">+</button>
+
                     </div>
                 </td>
-                <td id="thanhTien-<%= ct.getMaChiTiet() %>"><%= String.format("%,.0f", thanhTien) %> VNĐ</td>
+
+                <td id="thanhTien-<%= ct.getMaChiTiet() %>">
+                    <%= String.format("%,.0f", thanhTien) %> VNĐ
+                </td>
+
                 <td>
-                    <form action="XoaChiTietGioHang" method="post" style="display:inline;">
+                    <form action="ThemGioHang" method="post">
                         <input type="hidden" name="maChiTiet" value="<%= ct.getMaChiTiet() %>">
                         <button type="submit" class="delete-btn">❌ Xóa</button>
                     </form>
                 </td>
             </tr>
-            <% } %>
+        <%
+                } // end for
+        %>
         </tbody>
     </table>
 
     <div class="total">
-        Tổng cộng: <span id="tongCong"><%= String.format("%,.0f", tongTien) %> VNĐ</span>
+        Tổng cộng:
+        <span id="tongCong">
+            <%= String.format("%,.0f", tongTien) %> VNĐ
+        </span>
     </div>
 
-    <a href="Home" class="back-btn">← Tiếp tục mua sách</a>
+    <%
+        } // end else
+    %>
+
+    <div class="checkout-area">
+        <button type="button" class="btn-outline" onclick="location.href='Home'">
+            ← Tiếp tục mua sách
+        </button>
+
+        <button type="button" class="btn-primary"
+                onclick="openPopup('DatHang?MaGioHang=<%=gh.getMaGioHang() %>')"
+                <%= (list == null || list.isEmpty()) ? "disabled" : "" %>>
+            🛒 Đặt hàng
+        </button>
+    </div>
+
 </div>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        $(document).on('click', '.btn-plus, .btn-minus', function () {
 
-<script>
-document.querySelectorAll('.qty-btn').forEach(btn => {
-    btn.addEventListener('click', async (e) => {
-        const parent = e.target.closest('.quantity-control');
-        const maChiTiet = parent.dataset.id;
-        const input = parent.querySelector('.qty-input');
-        const action = e.target.classList.contains('plus') ? 'tang' : 'giam';
+            let maChiTiet = $(this).data("mact");
+            let maGioHang = $(this).data("magiohang");
+            let maSach = $(this).data("masach");
 
-        try {
-            const response = await fetch('<%= request.getContextPath() %>/CapNhatSoLuongChiTietGioHang', {
-                method: 'POST',
-                headers: {'Content-Type': 'application/x-www-form-urlencoded'},
-                body: `maChiTiet=${maChiTiet}&action=${action}`
+            let input = $("#sl-" + maSach);
+            let sl = parseInt(input.val());
+
+            if ($(this).hasClass("btn-plus")) sl++;
+            if ($(this).hasClass("btn-minus") && sl > 1) sl--;
+
+            input.val(sl);
+
+            $.ajax({
+                url: "CapNhatSoLuongChiTietGioHang",
+                type: "POST",
+                data: {
+                    maChiTiet: maChiTiet,
+                    maGioHang: maGioHang,
+                    maSach: maSach,
+                    soLuong: sl
+                },
+                success: function (res) {
+                    $("#thanhTien-" + maChiTiet).html(formatCurrency(res.thanhTien) + " VNĐ");
+                    $("#tongCong").html(formatCurrency(res.tongTien) + " VNĐ");
+                }
             });
-            const result = await response.json();
+        });
 
-            // Cập nhật lại trên giao diện
-            input.value = result.soLuongMoi;
-            document.querySelector(`#thanhTien-${maChiTiet}`).textContent = result.thanhTienMoi + " VNĐ";
-            document.querySelector("#tongCong").textContent = result.tongCong + " VNĐ";
-        } catch (err) {
-//            console.error('Lỗi khi cập nhật số lượng:', err);
+        function formatCurrency(num) {
+            return num.toLocaleString("vi-VN");
         }
-    });
-});
-</script>
+    </script>
 </body>
 </html>

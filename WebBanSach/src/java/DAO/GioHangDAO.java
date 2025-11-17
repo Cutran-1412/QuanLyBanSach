@@ -99,7 +99,7 @@ public class GioHangDAO {
         } catch (Exception e) {
         }
     }
-     public GioHang getGioHangByNguoiDung(String maNguoiDung) {
+    public GioHang getGioHangByNguoiDung(String maNguoiDung) {
         String sql = "SELECT * FROM GioHang WHERE MaNguoiDung = ?";
         try (Connection conn = DBConnection.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql)) {
@@ -153,4 +153,5 @@ public class GioHangDAO {
         }
         return tong;
     }
+    
 }

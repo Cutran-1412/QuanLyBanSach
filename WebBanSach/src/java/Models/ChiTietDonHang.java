@@ -13,17 +13,15 @@ public class ChiTietDonHang {
     private String MaDonHang;
     private String MaSach;
     private int SoLuong;
-    private double DonGia;
 
     public ChiTietDonHang() {
     }
 
-    public ChiTietDonHang(String MaChiTiet, String MaDonHang, String MaSach, int SoLuong, double DonGia) {
+    public ChiTietDonHang(String MaChiTiet, String MaDonHang, String MaSach, int SoLuong) {
         this.MaChiTiet = MaChiTiet;
         this.MaDonHang = MaDonHang;
         this.MaSach = MaSach;
         this.SoLuong = SoLuong;
-        this.DonGia = DonGia;
     }
 
     public String getMaChiTiet() {
@@ -42,10 +40,6 @@ public class ChiTietDonHang {
         return SoLuong;
     }
 
-    public double getDonGia() {
-        return DonGia;
-    }
-
     public void setMaChiTiet(String MaChiTiet) {
         this.MaChiTiet = MaChiTiet;
     }
@@ -60,10 +54,6 @@ public class ChiTietDonHang {
 
     public void setSoLuong(int SoLuong) {
         this.SoLuong = SoLuong;
-    }
-
-    public void setDonGia(double DonGia) {
-        this.DonGia = DonGia;
     }
     
 }

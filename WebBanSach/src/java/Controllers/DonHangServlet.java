@@ -5,11 +5,10 @@
 
 package Controllers;
 
-import DAO.ChiTietGioHangDAO;
-import DAO.GioHangDAO;
-import Models.ChiTietGioHang;
-import Models.GioHang;
-import Models.NguoiDung;
+import DAO.ChiTietDonHangDAO;
+import DAO.DonHangDAO;
+import Models.ChiTietDonHang;
+import Models.DonHang;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
@@ -17,16 +16,16 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import jakarta.servlet.http.HttpSession;
-import java.sql.Date;
-import java.time.LocalDate;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  *
  * @author Osiris
  */
-@WebServlet(name="ThemGioHang", urlPatterns={"/ThemGioHang"})
-public class ThemGioHangServlet extends HttpServlet {
+@WebServlet(name="DonHang", urlPatterns={"/DonHang"})
+public class DonHangServlet extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code> methods.
@@ -43,10 +42,10 @@ public class ThemGioHangServlet extends HttpServlet {
             out.println("<!DOCTYPE html>");
             out.println("<html>");
             out.println("<head>");
-            out.println("<title>Servlet ThemGioHangServlet</title>");
+            out.println("<title>Servlet DonHangServlet</title>");
             out.println("</head>");
             out.println("<body>");
-            out.println("<h1>Servlet ThemGioHangServlet at123 " + request.getContextPath () + "</h1>");
+            out.println("<h1>Servlet DonHangServlet at 1" + request.getContextPath () + "</h1>");
             out.println("</body>");
             out.println("</html>");
         }
@@ -63,30 +62,18 @@ public class ThemGioHangServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
     throws ServletException, IOException {
-        String masach = request.getParameter("MaSach");
-        HttpSession sesion  = request.getSession();
-        NguoiDung nd = (NguoiDung)sesion.getAttribute("nd");
-        if(nd!=null){
-            GioHangDAO ghDAO = new GioHangDAO();
-            GioHang gh = ghDAO.getGioHangByNguoiDung(nd.getMaNguoiDung());
-            if(gh == null){
-                GioHang ghnew;
-                ghnew = new GioHang(ghDAO.getMa(), nd.getMaNguoiDung(), Date.valueOf(LocalDate.now()));
-                ghDAO.Insert(ghnew);
-            }
-            GioHang ghnew = ghDAO.getGioHangByNguoiDung(nd.getMaNguoiDung());
-            ChiTietGioHangDAO ctghDAO = new ChiTietGioHangDAO();
-            
-            ChiTietGioHang ctgh = new ChiTietGioHang(ctghDAO.getMa(),ghnew.getMaGioHang() , masach, 1);
-            ctghDAO.Insert(ctgh);
-            new HomeServlet().doGet(request, response);
+        String manguoidung = request.getParameter("MaNguoiDung");
+        DonHangDAO dhDAO = new DonHangDAO();
+        ChiTietDonHangDAO ctDAO = new ChiTietDonHangDAO();
+        List<DonHang> listdonhang = dhDAO.GetByMaNguoiDung(manguoidung);
+        Map<String, List<ChiTietDonHang>> mapCT = new HashMap<>();
+        for (DonHang dh : listdonhang) {
+            List<ChiTietDonHang> ctList = ctDAO.getChiTietByDon(dh.getMaDonHang());
+            mapCT.put(dh.getMaDonHang(), ctList);
         }
-        else{
-            HttpSession session = request.getSession();
-            session.setAttribute("message", "Vui lòng đăng nhập để thêm sản phẩm");
-            session.setAttribute("msgType", "error"); 
-            new HomeServlet().doGet(request, response);
-        }
+        request.setAttribute("DonHang", listdonhang);
+        request.setAttribute("ChiTietDon", mapCT);
+        request.getRequestDispatcher("Pages/DonHang.jsp").forward(request, response);
     }
 
     /**
@@ -99,10 +86,7 @@ public class ThemGioHangServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
     throws ServletException, IOException {
-        String machitiet = request.getParameter("maChiTiet");
-        ChiTietGioHangDAO ctghDAO = new ChiTietGioHangDAO();
-        ctghDAO.Delete(machitiet);
-        new HomeServlet().doGet(request, response);
+        processRequest(request, response);
     }
 
     /**

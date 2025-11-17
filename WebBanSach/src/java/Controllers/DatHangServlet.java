@@ -5,9 +5,14 @@
 
 package Controllers;
 
+import DAO.ChiTietDonHangDAO;
 import DAO.ChiTietGioHangDAO;
+import DAO.DonHangDAO;
 import DAO.GioHangDAO;
+import Models.ChiTietDonHang;
 import Models.ChiTietGioHang;
+import java.sql.Date;
+import Models.DonHang;
 import Models.GioHang;
 import Models.NguoiDung;
 import java.io.IOException;
@@ -18,15 +23,16 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
-import java.sql.Date;
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  *
  * @author Osiris
  */
-@WebServlet(name="ThemGioHang", urlPatterns={"/ThemGioHang"})
-public class ThemGioHangServlet extends HttpServlet {
+@WebServlet(name="DatHang", urlPatterns={"/DatHang"})
+public class DatHangServlet extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code> methods.
@@ -43,10 +49,10 @@ public class ThemGioHangServlet extends HttpServlet {
             out.println("<!DOCTYPE html>");
             out.println("<html>");
             out.println("<head>");
-            out.println("<title>Servlet ThemGioHangServlet</title>");
+            out.println("<title>Servlet DatHangServlet</title>");
             out.println("</head>");
             out.println("<body>");
-            out.println("<h1>Servlet ThemGioHangServlet at123 " + request.getContextPath () + "</h1>");
+            out.println("<h1>Servlet DatHangServlet at " + request.getContextPath () + "</h1>");
             out.println("</body>");
             out.println("</html>");
         }
@@ -63,30 +69,23 @@ public class ThemGioHangServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
     throws ServletException, IOException {
-        String masach = request.getParameter("MaSach");
-        HttpSession sesion  = request.getSession();
-        NguoiDung nd = (NguoiDung)sesion.getAttribute("nd");
-        if(nd!=null){
-            GioHangDAO ghDAO = new GioHangDAO();
-            GioHang gh = ghDAO.getGioHangByNguoiDung(nd.getMaNguoiDung());
-            if(gh == null){
-                GioHang ghnew;
-                ghnew = new GioHang(ghDAO.getMa(), nd.getMaNguoiDung(), Date.valueOf(LocalDate.now()));
-                ghDAO.Insert(ghnew);
-            }
-            GioHang ghnew = ghDAO.getGioHangByNguoiDung(nd.getMaNguoiDung());
-            ChiTietGioHangDAO ctghDAO = new ChiTietGioHangDAO();
-            
-            ChiTietGioHang ctgh = new ChiTietGioHang(ctghDAO.getMa(),ghnew.getMaGioHang() , masach, 1);
-            ctghDAO.Insert(ctgh);
-            new HomeServlet().doGet(request, response);
-        }
-        else{
-            HttpSession session = request.getSession();
-            session.setAttribute("message", "Vui lòng đăng nhập để thêm sản phẩm");
-            session.setAttribute("msgType", "error"); 
-            new HomeServlet().doGet(request, response);
-        }
+       String magiohang = request.getParameter("MaGioHang");
+       DonHangDAO dhDAO = new DonHangDAO();
+       GioHangDAO ghDAO = new GioHangDAO();
+       HttpSession sesion  = request.getSession();
+       NguoiDung nd = (NguoiDung)sesion.getAttribute("nd");
+       GioHang gh = ghDAO.getById(magiohang);
+       DonHang dhnew = new DonHang();
+       
+       dhnew.setMaDonHang(dhDAO.generateMaDonHang());
+       dhnew.setMaNguoiDung(gh.getMaNguoiDung());
+       dhnew.setDiaChiNhanHang(nd.getDiaChi());
+       dhnew.setNgayDat(Date.valueOf(LocalDate.now()));
+       dhnew.setTrangThai("Đã đặt hàng");
+       dhnew.setTongTien(ghDAO.tinhTongTien(magiohang).doubleValue());
+       request.setAttribute("DonHang", dhnew);
+       request.setAttribute("MaGioHang", magiohang);
+       request.getRequestDispatcher("Pages/DatHang.jsp").forward(request, response);
     }
 
     /**
@@ -99,9 +98,37 @@ public class ThemGioHangServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
     throws ServletException, IOException {
-        String machitiet = request.getParameter("maChiTiet");
+        
+        String magiohang = request.getParameter("MaGioHang");
+        String maDonHang = request.getParameter("MaDonHang");
+        String maNguoiDung = request.getParameter("MaNguoiDung");
+        String diaChi = request.getParameter("DiaChiNhanHang");
+        Date ngayDat = Date.valueOf(LocalDate.now());
+        String trangThai = request.getParameter("TrangThai");
+        String tongTienStr = request.getParameter("TongTien");
+        double tongTien = 0;
+        if (tongTienStr != null && !tongTienStr.isEmpty()) {
+            tongTien = Double.parseDouble(tongTienStr);
+        }
+        DonHang dhnew = new DonHang(maDonHang, maNguoiDung, diaChi, ngayDat, trangThai, tongTien);
+        DonHangDAO dhDAO = new DonHangDAO();
+        GioHangDAO ghDAO = new GioHangDAO();
         ChiTietGioHangDAO ctghDAO = new ChiTietGioHangDAO();
-        ctghDAO.Delete(machitiet);
+        ChiTietDonHangDAO ctdhDAO = new ChiTietDonHangDAO();
+        List<ChiTietGioHang> listCTGH = ctghDAO.getAllByMaGioHang(magiohang);
+        for(ChiTietGioHang item : listCTGH){
+            ChiTietDonHang ctdhnew = new ChiTietDonHang();
+            ctdhnew.setMaChiTiet(ctdhDAO.getMaChiTietDonHang());
+            ctdhnew.setMaDonHang(maDonHang);
+            ctdhnew.setMaSach(item.getMaSach());
+            ctdhnew.setSoLuong(item.getSoLuong());
+            ctdhDAO.Insert(ctdhnew);
+            ctghDAO.Delete(item.getMaChiTiet());
+        }
+        ghDAO.Delete(magiohang);
+        dhDAO.Insert(dhnew);
+        ghDAO.getById(magiohang);
+        
         new HomeServlet().doGet(request, response);
     }
 

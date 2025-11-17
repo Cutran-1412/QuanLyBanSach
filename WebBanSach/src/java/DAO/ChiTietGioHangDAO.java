@@ -80,7 +80,7 @@ public class ChiTietGioHangDAO {
         }
     }
     public ChiTietGioHang getByMa(String maGioHang){
-        String sql = "SELECT * FROM chitietgiohang MaGioHang=?";
+        String sql = "SELECT * FROM chitietgiohang WHERE MaGioHang=?";
         try (Connection conn = DBConnection.getConnection();
             PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setString(1, maGioHang);
@@ -110,11 +110,10 @@ public class ChiTietGioHangDAO {
 
         try (Connection conn = DBConnection.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql)) {
-
-            ps.setString(1, maGioHang);
+            ps.setString(1, maGioHang); 
             ResultSet rs = ps.executeQuery();
-
             while (rs.next()) {
+   
                 ChiTietGioHang ct = new ChiTietGioHang(
                     rs.getString("MaChiTiet"),
                     rs.getString("MaGioHang"),
@@ -153,5 +152,84 @@ public class ChiTietGioHangDAO {
         }
 
         return newId;
+    }
+    public List<ChiTietGioHang> getAllByMaGioHang(String maGioHang) {
+        List<ChiTietGioHang> list = new ArrayList<>();
+        String sql = "SELECT * FROM chitietgiohang WHERE MaGioHang = ?";
+
+        try (Connection conn = DBConnection.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+
+            ps.setString(1, maGioHang);
+            ResultSet rs = ps.executeQuery();
+
+            while (rs.next()) {
+                ChiTietGioHang ct = new ChiTietGioHang(
+                    rs.getString("MaChiTiet"),
+                    rs.getString("MaGioHang"),
+                    rs.getString("MaSach"),
+                    rs.getInt("SoLuong")
+                );
+                list.add(ct);
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        if (list.isEmpty()) {
+            return null;
+        }
+        return list;
+    }
+    public double getDonGia(String maSach) {
+        String sql = "SELECT Gia FROM sach WHERE MaSach = ?";
+        try (Connection conn = DBConnection.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+
+            ps.setString(1, maSach);
+            ResultSet rs = ps.executeQuery();
+
+            if (rs.next()) {
+                return rs.getDouble("Gia");
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return 0;
+    }
+    public double getTongTien(String maGioHang) {
+        String sql = """
+            SELECT SUM(ct.SoLuong * s.Gia) AS TongTien
+            FROM chitietgiohang ct
+            JOIN sach s ON ct.MaSach = s.MaSach
+            WHERE ct.MaGioHang = ?
+        """;
+
+        try (Connection conn = DBConnection.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+
+            ps.setString(1, maGioHang);
+            ResultSet rs = ps.executeQuery();
+
+            if (rs.next()) {
+                return rs.getDouble("TongTien");
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return 0;
+    }
+    public void updateSoLuong(String maChiTiet, int soLuong) {
+        String sql = "UPDATE chitietgiohang SET SoLuong = ? WHERE MaChiTiet = ?";
+        try (Connection conn = DBConnection.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setInt(1, soLuong);
+            ps.setString(2, maChiTiet);
+            ps.executeUpdate();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 }
