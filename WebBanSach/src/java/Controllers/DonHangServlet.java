@@ -62,18 +62,37 @@ public class DonHangServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
     throws ServletException, IOException {
-        String manguoidung = request.getParameter("MaNguoiDung");
+         String trangThai = request.getParameter("trangThai");
+        String maNguoiDung = request.getParameter("MaNguoiDung");
+        if(trangThai == null || trangThai.isEmpty()) trangThai = "all";
         DonHangDAO dhDAO = new DonHangDAO();
         ChiTietDonHangDAO ctDAO = new ChiTietDonHangDAO();
-        List<DonHang> listdonhang = dhDAO.GetByMaNguoiDung(manguoidung);
-        Map<String, List<ChiTietDonHang>> mapCT = new HashMap<>();
-        for (DonHang dh : listdonhang) {
-            List<ChiTietDonHang> ctList = ctDAO.getChiTietByDon(dh.getMaDonHang());
-            mapCT.put(dh.getMaDonHang(), ctList);
+        List<DonHang> listDonHang;
+        if("all".equals(trangThai)){
+            if(maNguoiDung != null && !maNguoiDung.isEmpty()){
+                listDonHang = dhDAO.GetByMaNguoiDung(maNguoiDung);
+            } else {
+                listDonHang = dhDAO.getData();
+            }
+        } else {
+            listDonHang = dhDAO.getByTrangThaiAndNguoiDung(trangThai, maNguoiDung);
         }
-        request.setAttribute("DonHang", listdonhang);
-        request.setAttribute("ChiTietDon", mapCT);
-        request.getRequestDispatcher("Pages/DonHang.jsp").forward(request, response);
+
+        Map<String, List<ChiTietDonHang>> mapCT = new HashMap<>();
+        for(DonHang dh : listDonHang){
+            mapCT.put(dh.getMaDonHang(), ctDAO.getChiTietByDon(dh.getMaDonHang()));
+        }
+
+        // Trả JSON
+        response.setContentType("application/json");
+        response.setCharacterEncoding("UTF-8");
+
+        Map<String,Object> result = new HashMap<>();
+        result.put("orders", listDonHang);
+        result.put("details", mapCT);
+
+//        String json = new Gson().toJson(result);
+//        response.getWriter().write(json);
     }
 
     /**
@@ -86,7 +105,20 @@ public class DonHangServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
     throws ServletException, IOException {
-        processRequest(request, response);
+        String maDonHang = request.getParameter("maDonHang");
+        DonHangDAO dhDAO = new DonHangDAO();
+        DonHang dh = dhDAO.getById(maDonHang);
+        boolean success = false;
+        if (dh != null && "Đang giao hàng".equals(dh.getTrangThai())) {
+            dh.setTrangThai("Đã nhận hàng");
+            dhDAO.Update(dh);
+            success = true;
+        }
+        response.setContentType("application/json");
+        response.setCharacterEncoding("UTF-8");
+        String json = "{\"success\":" + success + ", \"trangThai\":\"Đã nhận hàng\"}";
+        response.getWriter().write(json);
+        response.getWriter().flush();
     }
 
     /**
@@ -97,5 +129,6 @@ public class DonHangServlet extends HttpServlet {
     public String getServletInfo() {
         return "Short description";
     }// </editor-fold>
+
 
 }

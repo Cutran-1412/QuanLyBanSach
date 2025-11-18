@@ -216,10 +216,10 @@
             text-decoration: underline;
         }
         </style>
-
     </head>
+    
     <body>
-     <div class="login-modal-content">
+        <div class="login-modal-content">
             <!-- HEADER -->
             <div class="login-modal-header">
                 <button class="login-close-btn" onclick="closePopup()" type="button">×</button>
@@ -236,7 +236,7 @@
 
                     <!-- Tài khoản -->
                     <div class="login-input-group">
-                        <input type="text" id="Username" name="Username" placeholder="Email" required>
+                        <input type="text" id="Username" name="Username" placeholder="Tài khoản" required>
                     </div>
 
                     <!-- Mật khẩu -->
@@ -291,11 +291,9 @@
             const password = document.getElementById("Password");
 
             toggle.addEventListener("click", function () {
-                // Đổi type
                 const type = password.getAttribute("type") === "password" ? "text" : "password";
                 password.setAttribute("type", type);
 
-                // Đổi icon (nếu có dùng FontAwesome)
                 this.classList.toggle("fa-eye-slash");
             });
         </script>   

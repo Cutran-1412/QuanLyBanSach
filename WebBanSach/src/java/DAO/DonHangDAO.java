@@ -143,4 +143,57 @@ public class DonHangDAO {
         }
         return "DH0001";
     }
+    public List<DonHang> getByTrangThai(String trangThai) {
+        List<DonHang> list = new ArrayList<>();
+        String sql = "SELECT * FROM donhang WHERE TrangThai = ?";
+        try (Connection conn = DBConnection.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+
+            ps.setString(1, trangThai);
+            ResultSet rs = ps.executeQuery();
+
+            while (rs.next()) {
+                DonHang dh = new DonHang(
+                        rs.getString("MaDonHang"),
+                        rs.getString("MaNguoiDung"),
+                        rs.getString("DiaChiNhanHang"),
+                        rs.getDate("NgayDat"),
+                        rs.getString("TrangThai"),
+                        rs.getDouble("TongTien")
+                );
+                list.add(dh);
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return list;
+    }
+    public List<DonHang> getByTrangThaiAndNguoiDung(String trangThai, String maNguoiDung) {
+        List<DonHang> list = new ArrayList<>();
+        String sql = "SELECT * FROM donhang WHERE TrangThai=? AND MaNguoiDung=?";
+        try (Connection conn = DBConnection.getConnection();
+        PreparedStatement ps = conn.prepareStatement(sql)) {
+
+
+        ps.setString(1, trangThai);
+        ps.setString(2, maNguoiDung);
+        ResultSet rs = ps.executeQuery();
+
+
+        while (rs.next()) {
+        list.add(new DonHang(
+        rs.getString("MaDonHang"),
+        rs.getString("MaNguoiDung"),
+        rs.getString("DiaChiNhanHang"),
+        rs.getDate("NgayDat"),
+        rs.getString("TrangThai"),
+        rs.getDouble("TongTien")
+        ));
+    }
+
+
+} catch (Exception e) { e.printStackTrace(); }
+return list;
+}
 }

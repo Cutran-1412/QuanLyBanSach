@@ -174,10 +174,11 @@
         <section>
             <div>
                 <nav>
-                    <button onclick="loadPage('Admin/Pages/Home.jsp')">Home</button>
+                    <button onclick="loadPage('Admin/Pages/Home.jsp')">Thống kê</button>
                     <button onclick="loadPage('AdminNguoiDung')">Quản lý người dùng</button>
-                    <button onclick="loadPage('AdminSach')">Quản lý sách</button>
+                    <button onclick="loadPage('AdminDonHang')">Quản lý Đơn hàng</button>
                     <button onclick="loadPage('AdminTheLoai')">Quản lý thể loại</button>
+                    <button onclick="loadPage('AdminSach')">Quản lý sách</button>                    
                 </nav>
             </div>
             <div>

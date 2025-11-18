@@ -17,6 +17,17 @@
     <title>Đơn hàng</title>
 
     <style>
+        body { font-family: Arial, sans-serif; background: #f5f5f5; margin:0; padding:20px; }
+        .page-order { margin-bottom: 20px; }
+        .order-box { background: #fff; padding: 15px; border-radius: 10px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
+        .order-info { display: flex; justify-content: space-between; flex-wrap: wrap; align-items: center; }
+        .order-info div { margin-bottom: 8px; }
+        .detail-btn { padding: 6px 14px; background: #008cba; color: white; border:none; border-radius:5px; cursor:pointer; margin-left:5px; }
+        .detail-btn:hover { background:#0073a3; }
+        .detail-table { width: 100%; border-collapse: collapse; margin-top: 10px; }
+        .detail-table th, .detail-table td { border: 1px solid #ccc; padding: 6px; text-align:center; }
+        .detail-table th { background: #eee; }
+        .status-filter { padding: 5px 10px; margin-bottom: 15px; border-radius:5px; border:1px solid #ccc; }
         .page-order {
             font-family: Arial, sans-serif;
             background: #f5f5f5;
@@ -88,9 +99,16 @@
     Map<String, List<ChiTietDonHang>> chitiet =
         (Map<String, List<ChiTietDonHang>>) request.getAttribute("ChiTietDon");
 %>
-
-<h2>Danh sách đơn hàng</h2>
-
+<div class="page-order">
+<h2 class="title-box">Danh sách đơn hàng</h2>
+<label for="trangThai" style="font-weight:bold;">Lọc trạng thái:</label>
+<select id="trangThai" class="status-filter" onchange="filterStatus()">
+    <option value="all">Tất cả</option>
+    <option value="Đã đặt hàng">Đã đặt hàng</option>
+    <option value="Đang giao hàng">Đang giao hàng</option>
+    <option value="Đã nhận hàng">Đã nhận hàng</option>
+</select>
+</div>
 <% for (DonHang dh : donhang) { %>
 <div class="page-order">
 
@@ -101,7 +119,8 @@
         <div>
             <strong>Đơn hàng:</strong> <%= dh.getMaDonHang() %> <br>
             Ngày đặt: <%= dh.getNgayDat() %> <br>
-            Trạng thái: <%= dh.getTrangThai() %>
+            Trạng thái: <span class="status-text"><%= dh.getTrangThai() %></span><br>
+            Địa chỉ nhận hàng :<%= dh.getDiaChiNhanHang() %>
         </div>
 
         <div>
@@ -111,6 +130,12 @@
         <button class="detail-btn" onclick="toggleDetail('<%= dh.getMaDonHang() %>')">
             Xem chi tiết
         </button>
+
+        <% if ("Đang giao hàng".equals(dh.getTrangThai())) { %>
+            <button class="detail-btn" onclick="nhanHang('<%= dh.getMaDonHang() %>', this)">
+                Nhận Hàng
+            </button>
+        <% } %>
     </div>
 
     <div id="ct-<%= dh.getMaDonHang() %>" style="display:none;">
@@ -133,12 +158,54 @@
 </div>
 <% } %>
 
-<script>
-function toggleDetail(id) {
-    var box = document.getElementById("ct-" + id);
-    box.style.display = (box.style.display === "none" ? "block" : "none");
-}
-</script>
+    <script>
+        function toggleDetail(id) {
+            var box = document.getElementById("ct-" + id);
+            box.style.display = (box.style.display === "none" ? "block" : "none");
+        }
+        function filterStatus(){
+            var selected = document.getElementById("trangThai").value;
+            var orders = document.querySelectorAll("#donHangContainer .page-order");
+            orders.forEach(function(order){
+                var status = order.getAttribute("data-trangthai");
+                if(selected==="all" || status===selected){
+                    order.style.display = "block";
+                } else {
+                    order.style.display = "none";
+                }
+            });
+        }
+        function nhanHang(maDonHang, btn) {
+            if (!confirm("Bạn đã nhận hàng?")) return;
 
+            var xhr = new XMLHttpRequest();
+            xhr.open("POST", "DonHang", true);
+            xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+
+            xhr.onreadystatechange = function() {
+                if (xhr.readyState === 4 && xhr.status === 200) {
+                    try {
+                        var res = JSON.parse(xhr.responseText);
+                        if (res.success) {
+                            // 1. Cập nhật trạng thái trong span
+                            var orderBox = btn.closest(".order-box");
+                            var statusSpan = orderBox.querySelector(".status-text");
+                            statusSpan.textContent = res.trangThai;
+
+                            // 2. Ẩn nút Nhận Hàng
+                            btn.style.display = "none";
+                        } else {
+                            alert("Cập nhật thất bại!");
+                        }
+                    } catch (e) {
+                        console.error("Response:", xhr.responseText);
+                        alert("Lỗi phản hồi từ server!");
+                    }
+                }
+            };
+
+            xhr.send("maDonHang=" + encodeURIComponent(maDonHang));
+        }
+    </script>
 </body>
 </html>
