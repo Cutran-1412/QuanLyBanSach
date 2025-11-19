@@ -68,25 +68,29 @@
             <div class="right_action">
                 <%
                     HttpSession sesion  = request.getSession();
-                    NguoiDung nd = (NguoiDung) sesion.getAttribute("nd");
-                    if (nd == null) {%>
-                        <a href="#" class="btn_login" onclick="openPopup('Pages/DangNhap.jsp')">ĐĂNG NHẬP</a>
-                        <a href="#" class="btn_register" onclick="openPopup('Pages/DangKy.jsp')">ĐĂNG KÝ</a>
-                    <%} else {%>
-                        <span class="user_info">
-                            <i class="fa fa-user"></i> Xin chào, <b><%=nd.getHoTen() %></b>
-                        </span>
-                        <a href="#" class="cart_icon" onclick="loadPage('GioHang?MaNguoiDung=<%= nd.getMaNguoiDung() %>')">
-                            <i class="fa fa-shopping-cart"></i> Giỏ hàng
-                        </a>
-                        <a href="#" class="order_icon"
-                            onclick="loadPage('DonHang?MaNguoiDung=<%= nd.getMaNguoiDung() %>')">
-                             <i class="fa fa-box"></i> Đơn hàng
-                         </a>
-                        <a href="DangNhap" class="logout_btn">
-                            <i class="fa fa-sign-out"></i> Đăng xuất
-                        </a>
-                    <%}%>
+                    NguoiDung nd = (NguoiDung) sesion.getAttribute("nd");%>
+                    <div class="user-buttons">
+                        <% if (nd == null) { %>
+                            <button class="btn_login" onclick="openPopup('Pages/DangNhap.jsp')">ĐĂNG NHẬP</button>
+                            <button class="btn_register" onclick="openPopup('Pages/DangKy.jsp')">ĐĂNG KÝ</button>
+                        <% } else { %>
+                            <button class="user_info" onclick="loadPage('NguoiDung?MaNguoiDung=<%= nd.getMaNguoiDung() %>')">
+                                <i class="fa fa-user"></i> Xin chào, <b><%= nd.getHoTen() %></b>
+                            </button>
+
+                            <button class="cart_icon" onclick="loadPage('GioHang?MaNguoiDung=<%= nd.getMaNguoiDung() %>')">
+                                <i class="fa fa-shopping-cart"></i> Giỏ hàng
+                            </button>
+
+                            <button class="order_icon" onclick="loadPage('DonHang?MaNguoiDung=<%= nd.getMaNguoiDung() %>')">
+                                <i class="fa fa-box"></i> Đơn hàng
+                            </button>
+
+                            <button class="logout_btn" onclick="window.location.href='DangNhap'">
+                                <i class="fa fa-sign-out"></i> Đăng xuất
+                            </button>
+                        <% } %>
+                    </div>
             </div>
         </header>
         

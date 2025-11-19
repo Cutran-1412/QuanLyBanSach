@@ -276,3 +276,24 @@ html, body {
             opacity: .5;
             cursor: not-allowed;
         }
+.user-buttons button {
+    background: transparent;        /* Nền trong suốt */
+    border: none;                   /* Bỏ viền */
+    color: white;                   /* Màu chữ mặc định */
+    padding: 8px 16px;              /* Khoảng cách trong nút */
+    font-size: 16px;
+    cursor: pointer;
+    border-radius: 5px;             /* Bo góc nhẹ */
+    transition: all 0.3s ease;      /* Chuyển màu chữ và nền mượt mà */
+    margin: 3px;                    /* Khoảng cách giữa các nút */
+}
+
+/* Hiệu ứng hover: nền trắng, chữ đen */
+.user-buttons button:hover {
+    background-color: white;        /* Nền trắng khi hover */
+    color: black;                   /* Chữ đen khi hover */
+}
+.user-buttons .logout_btn:hover {
+    background-color: white;
+    color: red;
+}
