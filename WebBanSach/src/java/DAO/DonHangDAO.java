@@ -174,13 +174,9 @@ public class DonHangDAO {
         String sql = "SELECT * FROM donhang WHERE TrangThai=? AND MaNguoiDung=?";
         try (Connection conn = DBConnection.getConnection();
         PreparedStatement ps = conn.prepareStatement(sql)) {
-
-
         ps.setString(1, trangThai);
         ps.setString(2, maNguoiDung);
         ResultSet rs = ps.executeQuery();
-
-
         while (rs.next()) {
         list.add(new DonHang(
         rs.getString("MaDonHang"),
@@ -190,10 +186,8 @@ public class DonHangDAO {
         rs.getString("TrangThai"),
         rs.getDouble("TongTien")
         ));
+        }
+        } catch (Exception e) { e.printStackTrace(); }
+        return list;
     }
-
-
-} catch (Exception e) { e.printStackTrace(); }
-return list;
-}
 }

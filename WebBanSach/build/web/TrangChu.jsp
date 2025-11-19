@@ -121,15 +121,58 @@
                 
             <div id="content" class="content_div">
                 <div class="book_container">
-                    <% List<Sach> list = (List<Sach>) request.getAttribute("SachDB");
-                       if (list != null && !list.isEmpty()) {
-                           for (Sach s : list) { %>
+                    <% 
+                    List<Sach> listSach = (List<Sach>) request.getAttribute("SachDB");
+                    
+                    String pageParam = request.getParameter("page");
+                    int currentPage = (pageParam != null) ? Integer.parseInt(pageParam) : 1;
+                    
+                    int itemsPerPage = 10;
+                    
+                    if (listSach != null && !listSach.isEmpty()) {
+                        int totalItems = listSach.size();
+                        int totalPages = (int) Math.ceil((double) totalItems / itemsPerPage);
+                        
+                        int startIndex = (currentPage - 1) * itemsPerPage;
+                        int endIndex = Math.min(startIndex + itemsPerPage, totalItems);
+                        
+                        for (int i = startIndex; i < endIndex; i++) {
+                            Sach s = listSach.get(i);
+                            %>
                            <div class="book-card" onclick="loadPage('ChiTietSach?MaSach=<%= s.getMaSach() %>')">
                             <img src="<%= s.getAnh() %>" alt="<%= s.getTenSach() %>">
                             <div class="book-title"><%= s.getTenSach() %></div>
                             <div class="book-price"><%= String.format("%,.0f", s.getGia()) %> VNĐ</div>
                         </div>
-                    <% } } else { %>
+                    <% 
+                        }
+                    %>
+                </div>
+               
+                <div class="pagination">
+                    <% if (currentPage > 1) { %>
+                        <a href="?page=<%= currentPage - 1 %>" class="page-btn">« Trang trước</a>
+                    <% } else { %>
+                        <span class="page-btn disabled">« Trang trước</span>
+                    <% } %>
+                    
+                    <% for (int i = 1; i <= totalPages; i++) { %>
+                        <% if (i == currentPage) { %>
+                            <span class="page-number active"><%= i %></span>
+                        <% } else { %>
+                            <a href="?page=<%= i %>" class="page-number"><%= i %></a>
+                        <% } %>
+                    <% } %>
+                    
+                    <% if (currentPage < totalPages) { %>
+                        <a href="?page=<%= currentPage + 1 %>" class="page-btn">Trang sau »</a>
+                    <% } else { %>
+                        <span class="page-btn disabled">Trang sau »</span>
+                    <% } %>
+                </div>
+                    <% 
+                    } else { 
+                    %>
                         <p>Không có sách nào để hiển thị.</p>
                     <% } %>
                 </div>
