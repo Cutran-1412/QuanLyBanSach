@@ -14,6 +14,7 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
 import java.util.List;
 
 /**
@@ -78,26 +79,13 @@ public class DangKyServlet extends HttpServlet {
         String email = request.getParameter("Email");
         String sodienthoai = request.getParameter("Sodienthoai");
         String diachi = request.getParameter("Diachi");
-        if(ndDAO.CheckUser(user)){
-            response.setContentType("text/html;charset=UTF-8");
-            try (PrintWriter out = response.getWriter()) {
-                /* TODO output your page here. You may use following sample code. */
-                out.println("<!DOCTYPE html>");
-                out.println("<html>");
-                out.println("<head>");
-                out.println("<title>Servlet DangKyServlet</title>");
-                out.println("</head>");
-                out.println("<body>");
-                out.println("<h1>Tài khoản bị trùng</h1>");
-                out.println("</body>");
-                out.println("</html>");
-            }
+        if (ndDAO.CheckUser(user)) {
+            response.getWriter().write("EXISTS");
             return;
         }
         NguoiDung nd = new NguoiDung(ndDAO.getMa(), user,pass ,hoten, email, sodienthoai, diachi, false);  
         ndDAO.Insert(nd);
-        HomeServlet home = new HomeServlet();
-        home.doGet(request, response);
+        response.getWriter().write("SUCCESS");
     }
 
     /**

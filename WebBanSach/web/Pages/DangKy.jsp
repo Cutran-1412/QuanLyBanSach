@@ -10,6 +10,7 @@
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <link href="https://fonts.googleapis.com/css2?family=Roboto&display=swap" rel="stylesheet">
+        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
         <style>
             body {
                 font-family: 'Segoe UI', sans-serif;
@@ -227,6 +228,13 @@
         </style>
     </head>
     <body>
+        <div id="registerError" style="
+            color: red;
+            font-size: 14px;
+            margin-top: -10px;
+            margin-bottom: 5px;
+            display: none;">
+        </div>
         <div class="register-modal-wrapper">
             <div class="register-modal-content">
                 <div class="register-modal-header">
@@ -234,10 +242,7 @@
                         <div class="register-modal-logo"><span>Web</span><span>Sach</span><span>.com</span></div>
                             <h2>ĐĂNG KÝ</h2>
                 </div>
-
             <div class="register-modal-body">
-
-              <!-- Giữ logic code 1 -->
               <form action="${pageContext.request.contextPath}/DangKy" method="POST">
 
                 <div class="register-input-group">
@@ -287,7 +292,6 @@
             </div>
             </div>
         </div>
-
         <script>
           // Toggle mật khẩu
           const togglePassword = document.getElementById("togglePassword");
@@ -298,6 +302,30 @@
               passwordField.type = type;
               togglePassword.classList.toggle("fa-eye-slash");
           });
+          $("form").on("submit", function(e) {
+            e.preventDefault(); // chặn submit reload
+
+            $.ajax({
+                type: "POST",
+                url: "DangKy",
+                data: $(this).serialize(),
+
+                success: function(response) {
+                    response = response.trim();
+
+                    if (response === "EXISTS") {
+                        $("#registerError")
+                            .text("Tài khoản đã tồn tại!")
+                            .slideDown();
+                    } else if (response === "SUCCESS") {
+                        $("#registerError").hide();
+
+                        // đóng popup & reload Home
+                        window.location.href = "${pageContext.request.contextPath}/Home";
+                    }
+                }
+            });
+        });
         </script>
     </body>
 </html>

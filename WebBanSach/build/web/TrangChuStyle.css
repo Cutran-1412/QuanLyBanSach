@@ -50,19 +50,6 @@ html, body {
     padding: 8px 200px;
     border: 1px solid;
 }
-.search_nav .search_btn {
-    padding: 8px 13px;
-    font-weight: bold;
-    border-radius: 6px;
-    cursor: pointer;
-    background: black;
-    color: white;
-}
-
-.search_nav .search_btn:hover {
-    background: #333333;
-}
-
 .main_section {
     display: flex;
     margin-top: 20px;
@@ -290,10 +277,103 @@ html, body {
 
 /* Hiệu ứng hover: nền trắng, chữ đen */
 .user-buttons button:hover {
-    background-color: white;        /* Nền trắng khi hover */
-    color: black;                   /* Chữ đen khi hover */
+    background-color: #1E90FF; /* xanh dương khi hover */
+    color: white;              /* chữ trắng */
+    transition: all 0.3s ease; /* mượt mà khi hover */
 }
 .user-buttons .logout_btn:hover {
     background-color: white;
     color: red;
+}
+.menu_btn {
+    background-color: transparent;   /* Nền trong suốt */
+    color: green;                    /* Chữ mặc định */
+    border: none;                    /* Bỏ viền */
+    border-radius: 8px;              /* Bo góc nhẹ */
+    padding: 12px 24px;              /* Nút to hơn */
+    font-size: 24px;                 /* Chữ lớn hơn */
+    font-weight: bold;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 10px;                       /* Khoảng cách giữa icon và chữ */
+    transition: all 0.3s ease;       /* Chuyển màu mượt khi hover */
+}
+
+/* Hover: đổi nền và chữ */
+.menu_btn:hover {
+    background-color: green;
+    color: white;
+}
+
+
+.input_row {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 30px;
+}
+
+/* Ô nhập */
+.input_group {
+  position: relative;
+  width: 500px;
+  font-family: Arial, sans-serif;
+}
+
+/* Input */
+.input_group input {
+  width: 100%;
+  padding: 16px 14px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  font-size: 16px;
+  background: #f8f8f8;
+  outline: none;
+}
+
+/* Label — nhỏ + nhạt như placeholder */
+.input_group label {
+  position: absolute;
+  left: 14px;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 14px;
+  color: #aaa;
+  pointer-events: none;
+  background: #f8f8f8;
+  padding: 0 4px;
+  transition: 0.2s ease;
+}
+
+.input_group input:focus + label,
+.input_group input:not(:placeholder-shown) + label {
+  top: -10px;
+  left: 10px;
+  transform: none;
+  font-size: 14px;
+  color: #555;
+}
+.input_row {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 40px;
+}
+
+
+.search_btn {
+  padding: 0 25px;
+  height: 48px;
+  font-size: 16px;
+  color: white;
+  background-color: #4CAF50;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.search_btn:hover {
+  background-color: #1E90FF;
 }

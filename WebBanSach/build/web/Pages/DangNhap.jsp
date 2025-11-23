@@ -9,11 +9,9 @@
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <title>JSP Page</title>
+        <title></title>
         <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
         <style>
-        /* ===== POPUP ĐĂNG NHẬP ===== */
-
         .login-modal-content {
             width: 420px;
             background: #ffffff;
@@ -219,8 +217,17 @@
     </head>
     
     <body>
+        <div id="loginError" style="
+            display:none;
+            background: #ffdddd;
+            color:#d8000c;
+            padding:10px;
+            border-radius:5px;
+            margin-bottom:15px;
+            border:1px solid #f5c6cb;
+            font-size:14px;">
+        </div>
         <div class="login-modal-content">
-            <!-- HEADER -->
             <div class="login-modal-header">
                 <button class="login-close-btn" onclick="closePopup()" type="button">×</button>
 
@@ -229,17 +236,12 @@
                 </div>
                 <h2>ĐĂNG NHẬP</h2>
             </div>
-
-            <!-- BODY -->
             <div class="login-modal-body">
-                <form action="DangNhap" method="Post">
-
-                    <!-- Tài khoản -->
+                <form id="loginForm">
                     <div class="login-input-group">
                         <input type="text" id="Username" name="Username" placeholder="Tài khoản" required>
                     </div>
 
-                    <!-- Mật khẩu -->
                     <div class="login-input-group">
                         <div class="login-password-group">
                             <input type="password" id="Password" name="Password" placeholder="Mật khẩu" required>
@@ -247,24 +249,23 @@
                         </div>
                     </div>
 
-                    <!-- Quên mật khẩu -->
-                    <div class="login-forgot-password">
-                        <a href="#" onclick="event.preventDefault(); alert('Chức năng đang phát triển');">
-                            Quên mật khẩu?
-                        </a>
+                    <!-- Thông báo lỗi -->
+                    <div id="loginError" style="
+                        display:none;
+                        background: #ffdddd;
+                        color:#d8000c;
+                        padding:10px;
+                        border-radius:5px;
+                        margin-bottom:15px;
+                        border:1px solid #f5c6cb;
+                        font-size:14px;">
                     </div>
 
-                    <!-- Nút đăng nhập -->
                     <button type="submit" class="login-btn" id="btnDangNhap">Đăng nhập</button>
-
                 </form>
-
-                <!-- Divider -->
                 <div class="login-divider">
                     <span>Hoặc đăng nhập với</span>
                 </div>
-
-                <!-- Social login -->
                 <div class="login-social-login">
                     <button class="login-social-btn login-google-btn" type="button"
                         onclick="alert('Google login đang phát triển!');">
@@ -276,8 +277,6 @@
                         <i class="fab fa-facebook-f"></i> Facebook
                     </button>
                 </div>
-
-                <!-- Link đăng ký -->
                 <div class="login-register-link">
                     Bạn chưa có tài khoản? 
                     <a href="#" onclick="event.preventDefault(); openPopup('Pages/DangKy.jsp');">Đăng ký ngay</a>
@@ -287,14 +286,45 @@
         </div>
         
         <script>
-            const toggle = document.getElementById("togglePasswordPopup");
-            const password = document.getElementById("Password");
+            const togglePassword = document.getElementById("togglePassword");
+            const passwordField = document.getElementById("Password");
 
-            toggle.addEventListener("click", function () {
-                const type = password.getAttribute("type") === "password" ? "text" : "password";
-                password.setAttribute("type", type);
+            togglePassword.addEventListener("click", () => {
+                const type = passwordField.type === "password" ? "text" : "password";
+                passwordField.type = type;
+                togglePassword.classList.toggle("fa-eye-slash");
+            });
 
-                this.classList.toggle("fa-eye-slash");
+            $("form").on("submit", function(e) {
+                e.preventDefault();
+
+                $.ajax({
+                    type: "POST",
+                    url: "${pageContext.request.contextPath}/DangKy",
+                    data: $(this).serialize(),
+                    success: function(response) {
+                        response = response.trim();
+
+                        if (response === "EXISTS") {
+                            $("#registerError")
+                                .text("Tài khoản đã tồn tại!")
+                                .slideDown();
+                        } else if (response === "SUCCESS") {
+                            $("#registerError").hide();
+                            window.location.href = "${pageContext.request.contextPath}/Home";
+                        } else {
+                            console.log("Unexpected response:", response);
+                            $("#registerError")
+                                .text("Lỗi không xác định!")
+                                .slideDown();
+                        }
+                    },
+                    error: function() {
+                        $("#registerError")
+                            .text("Không thể kết nối server!")
+                            .slideDown();
+                    }
+                });
             });
         </script>   
     </body>

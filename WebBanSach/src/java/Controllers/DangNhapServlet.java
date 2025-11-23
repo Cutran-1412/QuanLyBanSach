@@ -63,9 +63,14 @@ public class DangNhapServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
     throws ServletException, IOException {
         HttpSession session = request.getSession(false);
-        if (session != null) {
+        if (session != null) {   
             session.invalidate();
         }
+        HttpSession sessionnew = request.getSession(true);
+        sessionnew.setAttribute("globalMsg", "Bạn đã đăng xuất!");
+        sessionnew.setAttribute("globalBg", "#dc3545");
+        sessionnew.setAttribute("globalColor", "#ffffff");
+        sessionnew.setAttribute("globalBorder", "#b21f2d");
         response.sendRedirect("Home");
     }
 
@@ -82,32 +87,23 @@ public class DangNhapServlet extends HttpServlet {
         String user = request.getParameter("Username");
         String pass = request.getParameter("Password");
         
-        HttpSession sesion  = request.getSession();
+        
         NguoiDungDAO ndDAO = new NguoiDungDAO();
         NguoiDung nd = ndDAO.SignIn(user, pass);
         if(nd ==null){
+            response.getWriter().write("FAIL");
             request.setAttribute("ThongBao", "Tài khoản hoặc mật khẩu không đúng!");
-            request.setAttribute("MoPopupDangNhap", true);
-            HomeServlet home = new HomeServlet();
-            home.doGet(request, response);
-            return; 
 
         }
         else{
-            if(nd.isVaiTro()){
-                sesion.setAttribute("nd",nd);
-                AdminServlet adm = new AdminServlet();
-                adm.doGet(request, response);
-            }
-            else{
-                
-                sesion.setAttribute("nd",nd);
-                HomeServlet home = new HomeServlet();
-                HttpSession session = request.getSession();
-                session.setAttribute("message", "Đăng nhập thành công!");
-                session.setAttribute("msgType", "success"); 
-                home.doGet(request, response);
-            }
+            HttpSession session  = request.getSession();
+            session.setAttribute("globalMsg", "Xin Chào "+ nd.getHoTen());
+            session.setAttribute("globalBg", "#007bff");
+            session.setAttribute("globalColor", "#ffffff");
+            session.setAttribute("globalBorder", "#0069d9");
+            session.setAttribute("globalType", "success");
+            response.getWriter().write("SUCCESS");
+            session.setAttribute("nd",nd);
         }
     }
 

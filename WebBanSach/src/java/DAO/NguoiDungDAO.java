@@ -179,19 +179,20 @@ public class NguoiDungDAO {
         }
         return newMaNguoiDung;
     }
-    public boolean CheckUser(String user){
+    public boolean CheckUser(String user) {
         Connection conn = DBConnection.getConnection();
-        if(conn != null){
+        if (conn != null) {
             try {
-                String sql = "Select *From NguoiDung";
-                Statement stmt = conn.createStatement();
-                ResultSet rs = stmt.executeQuery(sql);
-                while(rs.next()){
-                    if(user.equals(rs.getString("TaiKhoan"))){
-                        return true;
-                    }
-                }
+                String sql = "SELECT 1 FROM NguoiDung WHERE TaiKhoan = ?";
+                PreparedStatement ps = conn.prepareStatement(sql);
+                ps.setString(1, user);
+
+                ResultSet rs = ps.executeQuery();
+                boolean exists = rs.next();
+
                 conn.close();
+                return exists;
+
             } catch (SQLException ex) {
                 Logger.getLogger(NguoiDungDAO.class.getName()).log(Level.SEVERE, null, ex);
             }
