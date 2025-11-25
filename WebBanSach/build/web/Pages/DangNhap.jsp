@@ -236,7 +236,7 @@
 
                     <!-- Tài khoản -->
                     <div class="login-input-group">
-                        <input type="text" id="Username" name="Username" placeholder="Email" required>
+                        <input type="text" id="Username" name="Username" placeholder="Tài khoản" required>
                     </div>
 
                     <!-- Mật khẩu -->

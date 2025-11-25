@@ -12,7 +12,8 @@
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <title>JSP Page</title>
         <style>
-            body {
+            .book-detail-wrapper,
+            .book-detail-wrapper * {
                 font-family: Arial, sans-serif;
 /*                background-color: #fafafa;*/
             }

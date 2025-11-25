@@ -11,8 +11,9 @@
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <link href="https://fonts.googleapis.com/css2?family=Roboto&display=swap" rel="stylesheet">
         <style>
-            body {
-                font-family: 'Segoe UI', sans-serif;
+            .register-modal-wrapper,
+            .register-modal-wrapper * {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             }
             /* ----- LỚP NỀN MỜ TOÀN MÀN HÌNH ----- */
             .register-modal-wrapper {
